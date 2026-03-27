@@ -1,0 +1,58 @@
+{
+    "id": "d21c3028-41b4-4add-ab5c-564f3ee94db4",
+    "sceneType": "PREFAB",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "7c74f2e2-d1f5-4a6b-8b9d-f861afdadb7a",
+            "label": "container_1",
+            "x": 449,
+            "y": 152,
+            "scaleX": 1.5,
+            "scaleY": 1.5,
+            "ArcadeComponent.active": true,
+            "body.collideWorldBounds": true,
+            "body.width": 80,
+            "body.height": 80,
+            "body.offset.x": -40,
+            "body.offset.y": -40,
+            "list": [
+                {
+                    "type": "Image",
+                    "id": "0ffaf915-c69f-4113-8f32-48c11db385e1",
+                    "label": "chassis",
+                    "scope": "CLASS",
+                    "texture": {
+                        "key": "chassis-medium"
+                    }
+                },
+                {
+                    "type": "Image",
+                    "id": "567377df-a7ad-4214-b504-9b01a15e4f4b",
+                    "label": "turret",
+                    "scope": "CLASS",
+                    "texture": {
+                        "key": "turret-medium"
+                    }
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

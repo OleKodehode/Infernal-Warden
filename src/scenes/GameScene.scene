@@ -1,0 +1,79 @@
+{
+    "id": "916737d7-d73f-4a4b-a753-ddd72d5d6b8c",
+    "sceneType": "SCENE",
+    "settings": {
+        "snapEnabled": true,
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadPackFiles": [],
+        "createMethodName": "editorCreate",
+        "sceneKey": "GameScene",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "dc3e7f2b-6f6a-4e31-ad18-2db3e4055f85",
+            "label": "Lava",
+            "x": -150,
+            "y": -150,
+            "list": [
+                {
+                    "type": "Rectangle",
+                    "id": "a23f3997-be12-4237-8783-4505f9696886",
+                    "label": "Outer Border",
+                    "originX": 0,
+                    "originY": 0,
+                    "isFilled": true,
+                    "fillColor": "#e20e0e",
+                    "width": 1800,
+                    "height": 1400
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "id": "a45de6d6-bb15-46b2-a807-ca2bf96ff56c",
+            "label": "Arena",
+            "list": [
+                {
+                    "type": "Rectangle",
+                    "id": "8e74498a-69df-455c-8829-6dd8e8b3cad4",
+                    "label": "Floor",
+                    "originX": 0,
+                    "originY": 0,
+                    "isFilled": true,
+                    "fillColor": "#372929",
+                    "width": 1500,
+                    "height": 1100
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "id": "eb134c10-27a9-4b9a-b4d7-4f1bf5e89cb6",
+            "label": "Entities"
+        },
+        {
+            "prefabId": "d21c3028-41b4-4add-ab5c-564f3ee94db4",
+            "id": "f822cb76-2036-4f9a-bc09-d781fcc0efc0",
+            "unlock": [
+                "x",
+                "y"
+            ],
+            "label": "player",
+            "scope": "CLASS",
+            "x": 0,
+            "y": 0
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

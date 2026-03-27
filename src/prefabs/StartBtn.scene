@@ -1,0 +1,48 @@
+{
+    "id": "59179db4-78c5-4db2-91a3-13c9427d7e55",
+    "sceneType": "PREFAB",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "8a5612d6-88ab-46c4-9f2b-4a50658548dc",
+            "label": "container_1",
+            "hitArea.shape": "RECTANGLE",
+            "hitArea.width": 248,
+            "hitArea.height": 55,
+            "list": [
+                {
+                    "type": "Text",
+                    "id": "99826e87-b39b-4ee2-8afc-61cb5b7660a4",
+                    "label": "BtnTxt",
+                    "text": "Start Game",
+                    "fontFamily": "Arial",
+                    "fontSize": "48px",
+                    "color": "#ffcc00",
+                    "stroke": "#000",
+                    "strokeThickness": 2,
+                    "shadow.offsetX": 2,
+                    "shadow.offsetY": 2,
+                    "shadow.stroke": true,
+                    "shadow.blur": 4
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}
