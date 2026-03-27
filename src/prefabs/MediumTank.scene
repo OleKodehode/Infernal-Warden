@@ -22,10 +22,10 @@
             "scaleY": 1.5,
             "ArcadeComponent.active": true,
             "body.collideWorldBounds": true,
-            "body.width": 80,
-            "body.height": 80,
-            "body.offset.x": -40,
-            "body.offset.y": -40,
+            "body.width": 60,
+            "body.height": 60,
+            "body.offset.x": -30,
+            "body.offset.y": -30,
             "list": [
                 {
                     "type": "Image",

@@ -7,6 +7,11 @@
                 "key": "chassis-medium"
             },
             {
+                "url": "assets/dust-texture.png",
+                "type": "image",
+                "key": "dust-texture"
+            },
+            {
                 "url": "assets/main-menu.jpg",
                 "type": "image",
                 "key": "main-menu"

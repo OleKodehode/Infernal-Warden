@@ -15,8 +15,8 @@ export default class MediumTank extends Phaser.GameObjects.Container {
 		this.scaleY = 1.5;
 		scene.physics.add.existing(this, false);
 		this.body.collideWorldBounds = true;
-		this.body.setOffset(-40, -40);
-		this.body.setSize(80, 80, false);
+		this.body.setOffset(-30, -30);
+		this.body.setSize(60, 60, false);
 
 		// chassis
 		const chassis = scene.add.image(0, 0, "chassis-medium");

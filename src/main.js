@@ -1,26 +1,28 @@
 import MainMenu from "./scenes/MainMenu.js";
 import GameScene from "./scenes/GameScene.js";
 
-window.addEventListener('load', function () {
+window.addEventListener("load", function () {
+  var game = new Phaser.Game({
+    width: 1280,
+    height: 800,
+    type: Phaser.AUTO,
+    backgroundColor: "#000",
+    scale: {
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    input: {
+      gamepad: true,
+    },
+    physics: {
+      default: "arcade",
+      arcade: {
+        gravity: { x: 0, y: 0 },
+        debug: true,
+      },
+    },
+  });
 
-	var game = new Phaser.Game({
-		width: 1280,
-		height: 800,
-		type: Phaser.AUTO,
-        backgroundColor: "#000",
-		scale: {
-			mode: Phaser.Scale.FIT,
-			autoCenter: Phaser.Scale.CENTER_BOTH
-		},
-		physics: {
-			default: "arcade",
-			arcade: {
-				gravity: { x: 0, y: 0},
-				debug: true
-			}
-		}
-	});
-
-	game.scene.add("MainMenu", MainMenu, true);
-	game.scene.add("GameScene", GameScene);
+  game.scene.add("MainMenu", MainMenu, true);
+  game.scene.add("GameScene", GameScene);
 });
