@@ -23,6 +23,7 @@ window.addEventListener("load", function () {
     },
   });
 
-  game.scene.add("MainMenu", MainMenu, true);
-  game.scene.add("GameScene", GameScene);
+  // Uncomment main menu when closer to being done
+  // game.scene.add("MainMenu", MainMenu, true);
+  game.scene.add("GameScene", GameScene, true); // Remove true from this when Main Menu is uncommented
 });

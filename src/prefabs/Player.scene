@@ -28,6 +28,37 @@
             "body.offset.y": -30,
             "list": [
                 {
+                    "type": "Container",
+                    "id": "8a014c5b-7c62-4115-8ed4-8d480f6e4255",
+                    "label": "healthBar",
+                    "y": 40,
+                    "list": [
+                        {
+                            "type": "Rectangle",
+                            "id": "1cb73b20-f0f5-4316-ad26-05e8d522659a",
+                            "label": "healthBg",
+                            "isFilled": true,
+                            "fillColor": "#330000",
+                            "strokeColor": "#131313",
+                            "lineWidth": 3,
+                            "isStroked": true,
+                            "width": 62,
+                            "height": 12
+                        },
+                        {
+                            "type": "Rectangle",
+                            "id": "d80d0321-a461-4ab6-b4f0-97dbb5646051",
+                            "label": "healthFill",
+                            "x": -30,
+                            "originX": 0,
+                            "isFilled": true,
+                            "fillColor": "#16b803",
+                            "width": 60,
+                            "height": 10
+                        }
+                    ]
+                },
+                {
                     "type": "Image",
                     "id": "0ffaf915-c69f-4113-8f32-48c11db385e1",
                     "label": "chassis",
