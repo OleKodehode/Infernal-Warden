@@ -371,7 +371,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+2 Attack",
       weight: 35,
       apply: () => (this.player.stats.atk += 2),
-      condition: this.player.stats.atk < 100,
+      condition: () => this.player.stats.atk < 100,
     },
     {
       rarity: "common",
@@ -379,7 +379,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+20 movement speed",
       weight: 30,
       apply: () => (this.player.stats.speed += 20),
-      condition: this.player.stats.speed < 600,
+      condition: () => this.player.stats.speed < 600,
     },
     {
       rarity: "common",
@@ -387,7 +387,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+0.02 turn speed",
       weight: 25,
       apply: () => (this.player.stats.turnSpeed += 0.02),
-      condition: this.player.stats.turnSpeed < 0.8,
+      condition: () => this.player.stats.turnSpeed < 0.8,
     },
     {
       rarity: "common",
@@ -406,7 +406,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.stats.currentHealth += 20;
         this.player.updateHealthBar();
       },
-      condition: this.player.stats.maxHealth < 1000,
+      condition: () => this.player.stats.maxHealth < 1000,
     },
     {
       rarity: "common",
@@ -414,7 +414,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+0.5 health per second",
       weight: 25,
       apply: () => (this.player.stats.regen += 0.5),
-      condition: this.player.stats.regen < 50,
+      condition: () => this.player.stats.regen < 50,
     },
     {
       rarity: "common",
@@ -431,14 +431,14 @@ export default class GameScene extends Phaser.Scene {
       desc: "+4 attack power",
       apply: () => (this.player.stats.atk += 4),
       weight: 15,
-      condition: this.player.stats.atk < 100,
+      condition: () => this.player.stats.atk < 100,
     },
     {
       rarity: "uncommon",
       name: "Speed Boost",
       desc: "+40 speed",
       apply: () => (this.player.stats.speed += 40),
-      condition: this.player.stats.speed < 600,
+      condition: () => this.player.stats.speed < 600,
       weight: 13,
     },
     {
@@ -446,7 +446,7 @@ export default class GameScene extends Phaser.Scene {
       name: "Better Handling",
       desc: "+0.04 turn speed",
       apply: () => (this.player.stats.turnSpeed += 0.04),
-      condition: this.player.stats.turnSpeed < 0.8,
+      condition: () => this.player.stats.turnSpeed < 0.8,
       weight: 12,
     },
     {
@@ -466,7 +466,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.updateHealthBar();
       },
       weight: 12,
-      condition: this.player.stats.maxHealth < 1000,
+      condition: () => this.player.stats.maxHealth < 1000,
     },
     {
       rarity: "uncommon",
@@ -474,7 +474,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+1 HP per second",
       apply: () => (this.player.stats.regen += 1),
       weight: 11,
-      condition: this.player.stats.regen < 50,
+      condition: () => this.player.stats.regen < 50,
     },
     {
       rarity: "common",
@@ -491,14 +491,14 @@ export default class GameScene extends Phaser.Scene {
       desc: "+8 attack",
       apply: () => (this.player.stats.atk += 8),
       weight: 8,
-      condition: this.player.stats.atk < 100,
+      condition: () => this.player.stats.atk < 100,
     },
     {
       rarity: "rare",
       name: "Speed Boost",
       desc: "+80 speed",
       apply: () => (this.player.stats.speed += 80),
-      condition: this.player.stats.speed < 600,
+      condition: () => this.player.stats.speed < 600,
       weight: 7,
     },
     {
@@ -506,7 +506,7 @@ export default class GameScene extends Phaser.Scene {
       name: "Better Handling",
       desc: "+0.1 turn speed",
       apply: () => (this.player.stats.turnSpeed += 0.1),
-      condition: this.player.stats.turnSpeed < 0.5,
+      condition: () => this.player.stats.turnSpeed < 0.5,
       weight: 6,
     },
     {
@@ -526,7 +526,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.updateHealthBar();
       },
       weight: 6,
-      condition: this.player.stats.maxHealth < 1000,
+      condition: () => this.player.stats.maxHealth < 1000,
     },
     {
       rarity: "rare",
@@ -534,7 +534,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+2 HP per second",
       apply: () => (this.player.stats.regen += 2),
       weight: 5,
-      condition: this.player.stats.regen < 50,
+      condition: () => this.player.stats.regen < 50,
     },
     {
       rarity: "rare",
@@ -542,7 +542,7 @@ export default class GameScene extends Phaser.Scene {
       desc: "+1 projectiles with each attack (max 4)",
       apply: () => this.player.stats.projectiles++,
       weight: 5,
-      condition: this.player.stats.projectiles < 4,
+      condition: () => this.player.stats.projectiles < 4,
     },
     {
       rarity: "rare",
