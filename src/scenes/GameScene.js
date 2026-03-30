@@ -376,7 +376,7 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "common",
       name: "Speed Boost",
-      desc: "+20 movement speed",
+      desc: "+20 speed",
       weight: 30,
       apply: () => (this.player.stats.speed += 20),
       condition: () => this.player.stats.speed < 600,
@@ -506,7 +506,7 @@ export default class GameScene extends Phaser.Scene {
       name: "Better Handling",
       desc: "+0.1 turn speed",
       apply: () => (this.player.stats.turnSpeed += 0.1),
-      condition: () => this.player.stats.turnSpeed < 0.5,
+      condition: () => this.player.stats.turnSpeed < 0.8,
       weight: 6,
     },
     {
@@ -735,7 +735,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.waveTime--;
     this.timeLeftText.setText(`${this.waveTime}`);
-    this.player.stats.currentHealth += this.player.stats.regen;
+    if (
+      this.player.stats.currentHealth + this.player.stats.regen <
+      this.player.stats.maxHealth
+    ) {
+      this.player.stats.currentHealth += this.player.stats.regen;
+      this.player.updateHealthBar();
+    }
 
     if (this.waveTime <= 0) this.endWave();
   }
@@ -769,15 +775,33 @@ export default class GameScene extends Phaser.Scene {
     // Extra safety
     this.pausePlayerInput();
 
-    // Pick random upgrades
-    const attackUpg = Phaser.Utils.Array.GetRandom(this.allUpgrades.attack);
-    const mobilityUpg = Phaser.Utils.Array.GetRandom(this.allUpgrades.mobility);
-    const defenseUpg = Phaser.Utils.Array.GetRandom(this.allUpgrades.defense);
+    let available = this.allUpgrades.filter(
+      (upg) => !upg.condition || upg.condition(),
+    );
+
+    console.log(available);
+
+    // Pick 3 random upgrades using weights
+    const chosen = [];
+    for (let i = 0; i < 3; i++) {
+      if (available.length === 0) break;
+      const picked = this.getWeightedRandom(available);
+      chosen.push(picked);
+      const chosenIndex = available.indexOf(picked);
+      if (chosenIndex > -1) available.splice(chosenIndex, 1);
+    }
+
+    // Fallback if we somehow have less than 3
+    while (chosen.length < 3) {
+      chosen.push(this.allUpgrades[6]); // 20% HP recovery
+    }
+
+    console.log(chosen);
 
     // Helper function
-    this.applyUpgradeToBox(this.upgrade1, attackUpg);
-    this.applyUpgradeToBox(this.upgrade2, mobilityUpg);
-    this.applyUpgradeToBox(this.upgrade3, defenseUpg);
+    this.applyUpgradeToBox(this.upgrade1, chosen[0]);
+    this.applyUpgradeToBox(this.upgrade2, chosen[1]);
+    this.applyUpgradeToBox(this.upgrade3, chosen[2]);
   }
 
   applyUpgradeToBox(box, upgrade) {
@@ -802,9 +826,20 @@ export default class GameScene extends Phaser.Scene {
         : box === this.upgrade2
           ? this.upgradeBtn2
           : this.upgradeBtn3;
-
+    console.log(upgrade);
     if (nameTxt) nameTxt.setText(upgrade.name);
     if (descTxt) descTxt.setText(upgrade.desc);
+
+    switch (upgrade.rarity) {
+      case "rare":
+        nameTxt.setColor("#0084ff"); // Blue
+        break;
+      case "uncommon":
+        nameTxt.setColor("#00ff00"); // Green
+      default:
+        nameTxt.setColor("#fff"); // White
+        break;
+    }
 
     if (btn) {
       // Making sure the button is in screen space
@@ -914,6 +949,24 @@ export default class GameScene extends Phaser.Scene {
         bullet.body.setVelocity(0, 0);
       }
     }
+  }
+
+  getWeightedRandom(array, weightKey = "weight") {
+    if (!array || array.lenght === 0) return null;
+
+    let totalWeight = 0;
+    for (let item of array) {
+      totalWeight += item[weightKey] || 1;
+    }
+
+    let random = Math.random() * totalWeight;
+
+    for (let item of array) {
+      random -= item[weightKey] || 1;
+      if (random <= 0) return item;
+    }
+
+    return array[array.lenght - 1]; // fallback
   }
   /* END-USER-CODE */
 }
