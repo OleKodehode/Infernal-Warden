@@ -371,6 +371,9 @@ export default class GameScene extends Phaser.Scene {
   enemies = null; // Gets set in create
   spawnIndicators = []; // pool of indicators
   lastHitTime = 0;
+  autofire = false;
+  lastToggle = 0;
+  gamepadAiming = false;
 
   // Write your code here
 
@@ -395,7 +398,7 @@ export default class GameScene extends Phaser.Scene {
       left: "LEFT",
       d: "D",
       right: "RIGHT",
-      test: "SPACE",
+      autoFireToggle: "SPACE",
     });
     this.input.gamepad.once("connected", (pad) => (this.pad = pad));
 
@@ -490,6 +493,8 @@ export default class GameScene extends Phaser.Scene {
   update() {
     if (!this.player || !this.player.isAlive || !this.isWaveActive) return;
 
+    const now = this.time.now;
+
     if (this.upgradeScreen && this.upgradeScreen.visible) {
       this.player.body.setVelocity(0, 0);
       return;
@@ -522,15 +527,43 @@ export default class GameScene extends Phaser.Scene {
 
     const pointer = this.input.activePointer;
 
-    this.player.updateTurret(pointer.worldX, pointer.worldY, this.mouseMoved);
+    // Game pad aiming
+    if (this.pad) {
+      const rx = this.pad.rightStick.x;
+      const ry = this.pad.rightStick.y;
 
-    // Test for damage taken.
-    if (this.input.keyboard.checkDown(this.keys.test, 500)) {
-      this.player.takeDamage(15);
-      console.log(this.player.stats.currentHealth);
+      if (Math.abs(rx) > 0.15 || Math.abs(ry) > 0.15) {
+        this.gamepadAiming = true;
+        const aimAngle = Math.atan2(ry, rx);
+        this.player.turret.rotation = Phaser.Math.Angle.RotateTo(
+          this.player.turret.rotation,
+          aimAngle,
+          0.12,
+        );
+      } else {
+        this.gamepadAiming = false;
+      }
     }
 
-    if (this.input.activePointer.isDown || this.pad?.A) {
+    if (!this.gamepadAiming) {
+      this.player.updateTurret(pointer.worldX, pointer.worldY, this.mouseMoved);
+    }
+
+    // Test for damage taken.
+    if (
+      (this.input.keyboard.checkDown(this.keys.autoFireToggle, 300) ||
+        (this.pad && this.pad?.B)) &&
+      now - this.lastToggle > 300
+    ) {
+      this.autoFire = !this.autoFire;
+      this.lastToggle = now;
+
+      console.log("Auto-fire:", this.autoFire ? "ON" : "OFF");
+    }
+
+    const shouldShoot = this.input.activePointer.isDown || this.pad?.A;
+
+    if (shouldShoot || this.autoFire) {
       this.tryShoot();
     }
 
@@ -1067,7 +1100,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   selectEnemyType(wave) {
-    if (wave < 1) return "magma";
+    if (wave < 4) return "magma";
 
     const larvaChance = Math.min(0.25 + (wave - 2) * 0.07, 0.65); // More common the further the player goes
     return Math.random() < larvaChance ? "larva" : "magma";
@@ -1082,6 +1115,7 @@ export default class GameScene extends Phaser.Scene {
     bullet.setActive(true);
     bullet.damage = damage || 10;
     bullet.setDepth(3);
+    if (bullet.body) bullet.body.enable = true;
 
     const speed = bullet.speed;
     bullet.body.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
@@ -1114,7 +1148,15 @@ export default class GameScene extends Phaser.Scene {
     if (!bullet.active) return;
 
     const now = this.time.now;
-    if (now - this.lastHitTime < 800) return;
+    if (now - this.lastHitTime < 800) {
+      // despawn the bullet but don't get hit
+      bullet.setActive(false);
+      bullet.setVisible(false);
+      if (bullet.body) {
+        bullet.body.setVelocity(0, 0);
+        bullet.body.enable = false;
+      }
+    }
 
     this.lastHitTime = now;
 

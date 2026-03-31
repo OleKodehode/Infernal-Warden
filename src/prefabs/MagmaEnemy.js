@@ -117,6 +117,8 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
 
     this.healthBar.setVisible(false);
 
+    this.body.setVelocity(0, 0);
+
     // Simple squish death animation
     this.scene.tweens.add({
       targets: this,

@@ -83,16 +83,21 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     if (this.bodySprite) this.bodySprite.rotation = angle;
 
     const MIN_RANGE = 320;
+    const now = this.scene.time.now;
+
     if (dist > MIN_RANGE) {
       // Chase the player
       const speed = this.stats.speed;
       this.body.setVelocity((dx / dist) * speed, (dy / dist) * speed);
-      this.isCharging = false; // Wind up for attacks - Not attacking while moving
+
+      // reset charging state when moving
+      if (this.isCharging && now - this.chargeStartTime > 800) {
+        this.isCharging = false;
+        if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
+      }
     } else {
       // Stop and shoot (finishes the shot regardless)
       this.body.setVelocity(0, 0);
-
-      const now = this.scene.time.now;
 
       // Wind up to attack
       if (!this.isCharging) {
@@ -109,11 +114,14 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
       const windUpTime = 650;
 
       if (now - this.chargeStartTime >= windUpTime) {
-        const spawnX = this.x + Math.cos(angle) * 48;
-        const spawnY = this.y + Math.sin(angle) * 48;
+        const spawnX = this.x + Math.cos(angle) * 50;
+        const spawnY = this.y + Math.sin(angle) * 50;
         this.scene.fireEnemyBullet(spawnX, spawnY, angle, this.stats.dmg);
 
-        this.isCharging = false;
+        if (dist > MIN_RANGE) {
+          this.chargeStartTime = now;
+          this.isCharging = false;
+        }
         // if (this.bodySprite) this.bodySprite.clearTint();
         if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
       }
