@@ -103,10 +103,6 @@ export default class GameScene extends Phaser.Scene {
 
     // upgrade1
     const upgrade1 = this.add.container(96, 112);
-    upgrade1.setInteractive(
-      new Phaser.Geom.Rectangle(-77, -225, 253, 450),
-      Phaser.Geom.Rectangle.Contains,
-    );
     upgradeContainers.add(upgrade1);
 
     // upgradeBtn1
@@ -156,10 +152,6 @@ export default class GameScene extends Phaser.Scene {
 
     // upgrade2
     const upgrade2 = this.add.container(480, 112);
-    upgrade2.setInteractive(
-      new Phaser.Geom.Rectangle(-77, -225, 253, 450),
-      Phaser.Geom.Rectangle.Contains,
-    );
     upgradeContainers.add(upgrade2);
 
     // upgradeBtn2
@@ -211,10 +203,6 @@ export default class GameScene extends Phaser.Scene {
 
     // upgrade3
     const upgrade3 = this.add.container(864, 112);
-    upgrade3.setInteractive(
-      new Phaser.Geom.Rectangle(-77, -225, 253, 450),
-      Phaser.Geom.Rectangle.Contains,
-    );
     upgradeContainers.add(upgrade3);
 
     // upgradeBtn3
@@ -376,7 +364,7 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "common",
       name: "Speed Boost",
-      desc: "+20 speed",
+      desc: "Small speed boost (20)",
       weight: 30,
       apply: () => (this.player.stats.speed += 20),
       condition: () => this.player.stats.speed < 600,
@@ -384,10 +372,10 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "common",
       name: "Better Handle",
-      desc: "+0.02 turn speed",
+      desc: "A little better turning rate (0.0025)",
       weight: 25,
-      apply: () => (this.player.stats.turnSpeed += 0.02),
-      condition: () => this.player.stats.turnSpeed < 0.8,
+      apply: () => (this.player.stats.turnSpeed += 0.0025),
+      condition: () => this.player.stats.turnSpeed < 0.1,
     },
     {
       rarity: "common",
@@ -428,7 +416,7 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "uncommon",
       name: "Fire Power",
-      desc: "+4 attack power",
+      desc: "+4 attack",
       apply: () => (this.player.stats.atk += 4),
       weight: 15,
       condition: () => this.player.stats.atk < 100,
@@ -436,7 +424,7 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "uncommon",
       name: "Speed Boost",
-      desc: "+40 speed",
+      desc: "Medium speed boost (40)",
       apply: () => (this.player.stats.speed += 40),
       condition: () => this.player.stats.speed < 600,
       weight: 13,
@@ -444,9 +432,9 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "uncommon",
       name: "Better Handling",
-      desc: "+0.04 turn speed",
-      apply: () => (this.player.stats.turnSpeed += 0.04),
-      condition: () => this.player.stats.turnSpeed < 0.8,
+      desc: "Better turn rate (0.005)",
+      apply: () => (this.player.stats.turnSpeed += 0.005),
+      condition: () => this.player.stats.turnSpeed < 0.1,
       weight: 12,
     },
     {
@@ -496,7 +484,7 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "rare",
       name: "Speed Boost",
-      desc: "+80 speed",
+      desc: "Big speed boost! (80)",
       apply: () => (this.player.stats.speed += 80),
       condition: () => this.player.stats.speed < 600,
       weight: 7,
@@ -504,9 +492,9 @@ export default class GameScene extends Phaser.Scene {
     {
       rarity: "rare",
       name: "Better Handling",
-      desc: "+0.1 turn speed",
-      apply: () => (this.player.stats.turnSpeed += 0.1),
-      condition: () => this.player.stats.turnSpeed < 0.8,
+      desc: "A lot better turning! (0.01)",
+      apply: () => (this.player.stats.turnSpeed += 0.01),
+      condition: () => this.player.stats.turnSpeed < 0.1,
       weight: 6,
     },
     {
@@ -608,7 +596,7 @@ export default class GameScene extends Phaser.Scene {
       blendMode: "NORMAL",
     });
 
-    this.dust.setDepth(4);
+    this.dust.setDepth(1);
 
     this.mouseMoved = false;
     this.time.addEvent({
@@ -633,7 +621,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
-    if (!this.player || !this.player.isAlive) return;
+    if (!this.player || !this.player.isAlive || !this.isWaveActive) return;
 
     if (this.upgradeScreen && this.upgradeScreen.visible) {
       this.player.body.setVelocity(0, 0);
@@ -889,6 +877,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   tryShoot() {
+    if (!this.isWaveActive) return;
     const now = this.time.now;
     const fireRate = this.player.stats.fireRate || 1000; // 1000 is default
 
@@ -952,7 +941,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   getWeightedRandom(array, weightKey = "weight") {
-    if (!array || array.lenght === 0) return null;
+    if (!array || array.length === 0) return null;
 
     let totalWeight = 0;
     for (let item of array) {
@@ -966,7 +955,7 @@ export default class GameScene extends Phaser.Scene {
       if (random <= 0) return item;
     }
 
-    return array[array.lenght - 1]; // fallback
+    return array[array.length - 1]; // fallback
   }
   /* END-USER-CODE */
 }
