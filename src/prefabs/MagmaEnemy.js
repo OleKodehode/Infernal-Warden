@@ -99,7 +99,7 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
   takeDamage(amount) {
     if (!this.isAlive) return;
     const now = this.scene.time.now;
-    if (now - this.lastHitTime < 150) return; // 150ms i-frames for enemies
+    if (now - this.lastHitTime < 20) return; // 150ms i-frames for enemies
 
     this.lastHitTime = now;
 

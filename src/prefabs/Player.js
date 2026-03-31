@@ -121,6 +121,16 @@ export default class Player extends Phaser.GameObjects.Container {
     if (this.stats.currentHealth < 0) this.stats.currentHealth = 0;
     this.updateHealthBar();
 
+    if (this.chassis) this.chassis.setTint(0xff55000);
+    if (this.turret) this.turret.setTint(0xff55500);
+
+    this.scene.time.delayedCall(80, () => {
+      if (this.isAlive) {
+        if (this.chassis) this.chassis.clearTint();
+        if (this.turret) this.turret.clearTint();
+      }
+    });
+
     if (this.stats.currentHealth <= 0) {
       this.die();
     }
@@ -132,8 +142,8 @@ export default class Player extends Phaser.GameObjects.Container {
     this.healthBar.setVisible(false);
 
     // Visual death feedback
-    this.chassis.setTint(0x880000);
-    this.turret.setVisible(false);
+    if (this.chassis) this.chassis.setTint(0x880000);
+    if (this.turret) this.turret.setVisible(false);
 
     // Freeze the tank completely
     this.body.setVelocity(0, 0);

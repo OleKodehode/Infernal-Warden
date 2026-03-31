@@ -1,0 +1,73 @@
+{
+    "id": "781d76fd-42f0-4069-bd6b-092094070966",
+    "sceneType": "PREFAB",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "3d7933f7-001a-40e5-8462-2da4d5ea9677",
+            "label": "container_1",
+            "list": [
+                {
+                    "type": "Ellipse",
+                    "id": "38d4541e-7a3f-4b75-b83a-fe905debe738",
+                    "label": "bodySprite",
+                    "isFilled": true,
+                    "fillColor": "#470f0f",
+                    "strokeColor": "#2b2b2b",
+                    "lineWidth": 3,
+                    "isStroked": true,
+                    "width": 80,
+                    "height": 40
+                },
+                {
+                    "type": "Container",
+                    "id": "8c24b646-64c9-479f-9346-2bd99ff1e012",
+                    "label": "healthBar",
+                    "y": -35,
+                    "list": [
+                        {
+                            "type": "Rectangle",
+                            "id": "ec6ecd7f-fca4-4a81-8aff-8915d412dedf",
+                            "label": "healthBg",
+                            "isFilled": true,
+                            "fillColor": "#360000",
+                            "strokeColor": "#131313",
+                            "lineWidth": 3,
+                            "isStroked": true,
+                            "width": 62,
+                            "height": 12
+                        },
+                        {
+                            "type": "Rectangle",
+                            "id": "02983643-315b-4ecb-8fd6-98189d295250",
+                            "label": "healthFill",
+                            "x": -30,
+                            "originX": 0,
+                            "isFilled": true,
+                            "fillColor": "#b80303",
+                            "width": 60,
+                            "height": 10
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

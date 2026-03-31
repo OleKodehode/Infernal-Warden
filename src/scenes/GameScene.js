@@ -3,6 +3,7 @@
 /* START OF COMPILED CODE */
 
 import MagmaEnemy from "../prefabs/MagmaEnemy.js";
+import LarvaEnemy from "../prefabs/LarvaEnemy.js";
 import Player from "../prefabs/Player.js";
 import StatsPanel from "../prefabs/StatsPanel.js";
 /* START-USER-IMPORTS */
@@ -364,7 +365,9 @@ export default class GameScene extends Phaser.Scene {
   bullets = [];
   bulletPoolSize = 100;
   lastShot = 0;
-  enemyPool = [];
+  magmaPool = [];
+  larvaPool = [];
+  enemyBullets = [];
   enemies = null; // Gets set in create
   spawnIndicators = []; // pool of indicators
   lastHitTime = 0;
@@ -406,7 +409,10 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemies
     this.enemies = this.physics.add.group();
-    this.createEnemyPool();
+    this.createMagmaPool();
+    this.createLarvaPool();
+
+    this.createEnemyBulletPool(); // Enemy bullets for larva
 
     // Spawn indicators - Multiple can be visible at once
     this.spawnIndicators = [];
@@ -427,12 +433,25 @@ export default class GameScene extends Phaser.Scene {
       null,
       this,
     );
+    // Collision for player bullets and enemies
     this.physics.add.overlap(
       this.bullets,
       this.enemies,
       this.onBulletHitEnemy,
       null,
       this,
+    );
+    // Collision for enemy bullets and the player
+    this.physics.add.overlap(
+      this.player,
+      this.enemyBullets,
+      this.onEnemyBulletHitPlayer,
+      null,
+      this,
+    );
+    // enemy bullets should ignore other enemies (also prevents self-collision)
+    this.physics.world.removeCollider(
+      this.physics.add.overlap(this.enemyBullets, this.enemies),
     );
 
     // particles
@@ -516,6 +535,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.updateBullets(); // clean off-screen bullets
+    this.updateEnemyBullets();
     this.updateStatsPanel();
     this.enemies.getChildren().forEach((enemy) => {
       if (enemy.isAlive && enemy.update) {
@@ -628,6 +648,15 @@ export default class GameScene extends Phaser.Scene {
         enemy.setActive(false);
         enemy.setVisible(false);
         if (enemy.body) enemy.body.enable = false;
+      }
+    });
+
+    this.enemyBullets.forEach((b) => {
+      b.setActive(false);
+      b.setVisible(false);
+      if (b.body) {
+        b.body.enable = false;
+        b.body.setVelocity(0, 0);
       }
     });
 
@@ -929,17 +958,29 @@ export default class GameScene extends Phaser.Scene {
 
         // Spawn/ reuse the enemy
         const wave = this.wave;
-        let enemy = this.enemyPool.find((e) => !e.active);
+        const type = this.selectEnemyType(wave);
+        let enemy;
 
-        if (!enemy) {
-          // fallback if there are no enemies available in pool - Unlikely
-          enemy = new MagmaEnemy(this, x, y);
-          this.add.existing(enemy);
-          this.enemies.add(enemy);
-          this.enemyPool.push(enemy);
+        // Switch to switch statement if more enemies are added
+        if (type === "magma") {
+          enemy = this.magmaPool.find((e) => !e.active);
+          if (!enemy) {
+            // add another to the pool if we ran out somehow
+            enemy = new MagmaEnemy(this, x, y);
+            this.add.existing(enemy);
+            this.enemies.add(enemy);
+            this.magmaPool.push(enemy);
+          }
         } else {
-          enemy.spawn(x, y, wave);
+          enemy = this.larvaPool.find((e) => !e.active);
+          if (!enemy) {
+            enemy = new LarvaEnemy(this, x, y);
+            this.add.existing(enemy);
+            this.enemies.add(enemy);
+            this.larvaPool.push(enemy);
+          }
         }
+        enemy.spawn(x, y, wave);
       },
     });
   }
@@ -987,18 +1028,105 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
-  createEnemyPool() {
-    for (let i = 0; i < 100; i++) {
-      // 100 enemy pool - Increase if necessary
+  createMagmaPool() {
+    for (let i = 0; i < 60; i++) {
+      // 60 magma pool - Increase if necessary
       const enemy = new MagmaEnemy(this, -2000, -2000); // Spawn off-screen
       enemy.setActive(false);
       enemy.setVisible(false);
       this.add.existing(enemy);
       this.enemies.add(enemy);
-      this.enemyPool.push(enemy);
+      this.magmaPool.push(enemy);
     }
   }
 
+  createLarvaPool() {
+    for (let i = 0; i < 40; i++) {
+      // 40 larva pool - Should be less shooters overall
+      const enemy = new LarvaEnemy(this, -2000, -2000);
+      enemy.setActive(false);
+      enemy.setVisible(false);
+      this.add.existing(enemy);
+      this.enemies.add(enemy);
+      this.larvaPool.push(enemy);
+    }
+  }
+
+  createEnemyBulletPool() {
+    for (let i = 0; i < 50; i++) {
+      // Adjust pool as necessary
+      const bullet = this.add.circle(0, 0, 5, 0xff2200);
+      bullet.setVisible(false);
+      bullet.setActive(false);
+      this.physics.add.existing(bullet, false);
+      bullet.body.setCircle(6);
+      bullet.damage = 10; // placeholder
+      bullet.speed = 260;
+      this.enemyBullets.push(bullet);
+    }
+  }
+
+  selectEnemyType(wave) {
+    if (wave < 1) return "magma";
+
+    const larvaChance = Math.min(0.25 + (wave - 2) * 0.07, 0.65); // More common the further the player goes
+    return Math.random() < larvaChance ? "larva" : "magma";
+  }
+
+  fireEnemyBullet(x, y, angle, damage) {
+    const bullet = this.getInactiveEnemyBullet();
+    if (!bullet) return;
+
+    bullet.setPosition(x, y);
+    bullet.setVisible(true);
+    bullet.setActive(true);
+    bullet.damage = damage || 10;
+    bullet.setDepth(3);
+
+    const speed = bullet.speed;
+    bullet.body.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+  }
+
+  getInactiveEnemyBullet() {
+    for (let bullet of this.enemyBullets) {
+      if (!bullet.active) return bullet;
+    }
+    return null;
+  }
+
+  updateEnemyBullets() {
+    for (let bullet of this.enemyBullets) {
+      if (!bullet.active) continue;
+      if (
+        bullet.x < -200 ||
+        bullet.x > 1900 ||
+        bullet.y < -200 ||
+        bullet.y > 1500
+      ) {
+        bullet.setVisible(false);
+        bullet.setActive(false);
+        bullet.body.setVelocity(0, 0);
+      }
+    }
+  }
+
+  onEnemyBulletHitPlayer(player, bullet) {
+    if (!bullet.active) return;
+
+    const now = this.time.now;
+    if (now - this.lastHitTime < 800) return;
+
+    this.lastHitTime = now;
+
+    bullet.setActive(false);
+    bullet.setVisible(false);
+    if (bullet.body) {
+      bullet.body.setVelocity(0, 0);
+      bullet.body.enable = false;
+    }
+
+    player.takeDamage(bullet.damage || 10);
+  }
   /* END-USER-CODE */
 }
 
