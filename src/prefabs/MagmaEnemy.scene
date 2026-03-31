@@ -44,7 +44,7 @@
                             "id": "3332f1b9-c866-4539-830a-14c2c70a38e6",
                             "label": "healthBg",
                             "isFilled": true,
-                            "fillColor": "#330000",
+                            "fillColor": "#360000",
                             "strokeColor": "#131313",
                             "lineWidth": 3,
                             "isStroked": true,
@@ -58,7 +58,7 @@
                             "x": -30,
                             "originX": 0,
                             "isFilled": true,
-                            "fillColor": "#16b803",
+                            "fillColor": "#b80303",
                             "width": 60,
                             "height": 10
                         }

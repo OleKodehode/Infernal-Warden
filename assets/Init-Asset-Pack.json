@@ -17,6 +17,11 @@
                 "key": "main-menu"
             },
             {
+                "url": "assets/pentagram.png",
+                "type": "image",
+                "key": "pentagram"
+            },
+            {
                 "url": "assets/title-text-quick-edit.png",
                 "type": "image",
                 "key": "title-text-quick-edit"

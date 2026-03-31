@@ -2,6 +2,7 @@
 
 /* START OF COMPILED CODE */
 
+import MagmaEnemy from "../prefabs/MagmaEnemy.js";
 import Player from "../prefabs/Player.js";
 import StatsPanel from "../prefabs/StatsPanel.js";
 /* START-USER-IMPORTS */
@@ -363,6 +364,11 @@ export default class GameScene extends Phaser.Scene {
   bullets = [];
   bulletPoolSize = 100;
   lastShot = 0;
+  enemyPool = [];
+  enemyPoolSize = 50;
+  enemies = this.physics.add.group();
+  currentSpawnLimit = 8;
+  spawnIndicator = null;
 
   // Write your code here
 
@@ -404,6 +410,22 @@ export default class GameScene extends Phaser.Scene {
     // Bullet pool
     this.createBulletPool();
 
+    // Enemy Collisions
+    this.physics.add.overlap(
+      this.player,
+      this.enemies,
+      this.onPlayerHitEnemy,
+      null,
+      this,
+    );
+    this.physics.add.overlap(
+      this.bullets,
+      this.enemies,
+      this.onBulletHitEnemy,
+      null,
+      this,
+    );
+
     // particles
     this.dust = this.add.particles(0, 0, "dust-texture", {
       scale: { start: 1.25, end: 0 },
@@ -414,7 +436,7 @@ export default class GameScene extends Phaser.Scene {
       blendMode: "NORMAL",
     });
 
-    this.dust.setDepth(1);
+    this.dust.setDepth(2);
 
     this.mouseMoved = false;
     this.time.addEvent({
@@ -436,6 +458,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.startWave();
     this.playerCanMove = true;
+
+    // Spawn indicator
+    this.spawnIndicator = this.add.image(0, 0, "pentagram");
+    this.spawnIndicator.setScale(1.2);
+    this.spawnIndicator.setAlpha(0.8);
+    this.spawnIndicator.setDepth(1);
+    this.spawnIndicator.setVisible(false);
   }
 
   update() {
@@ -487,6 +516,11 @@ export default class GameScene extends Phaser.Scene {
 
     this.updateBullets(); // clean off-screen bullets
     this.updateStatsPanel();
+    this.enemies.getChildren().forEach((enemy) => {
+      if (enemy.isAlive && enemy.update) {
+        enemy.update(this.player);
+      }
+    });
   }
 
   /**
@@ -524,10 +558,15 @@ export default class GameScene extends Phaser.Scene {
   startWave() {
     this.isWaveActive = true;
     // this.waveTime = Math.min(0 + (this.wave * 5), 60)
-    this.waveTime = 5;
+    this.waveTime = Math.min(25 + this.wave * 5, 60);
 
     this.waveText.setText(`WAVE ${this.wave}`);
     this.timeLeftText.setText(`${this.waveTime}`);
+
+    // How many enemies should be alive at most during the wave
+    this.currentSpawnLimit = Math.floor(8 + this.wave * 2.8);
+    if (this.wave > 10)
+      this.currentSpawnLimit = Math.floor(this.currentSpawnLimit * 1.35);
 
     this.waveTimer = this.time.addEvent({
       delay: 1000, // 1 sec
@@ -535,6 +574,15 @@ export default class GameScene extends Phaser.Scene {
       callbackScope: this,
       loop: true,
     });
+
+    this.spawnTimer = this.time.addEvent({
+      delay: 1500, // Try to spawn enemies every 1.5 seconds
+      callback: this.trySpawnEnemy,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.trySpawnEnemy(); // Spawn a wave immediately
   }
 
   tickWaveTimer() {
@@ -542,17 +590,10 @@ export default class GameScene extends Phaser.Scene {
 
     this.waveTime--;
     this.timeLeftText.setText(`${this.waveTime}`);
-    if (
-      this.player.stats.currentHealth + this.player.stats.regen <
-      this.player.stats.maxHealth
-    ) {
-      this.player.stats.currentHealth += this.player.stats.regen;
-      this.player.updateHealthBar();
-    } else if (this.player.stats.currentHealth == this.player.stats.maxHealth) {
-      // just skip the if block if currentHealth is at maxHealth
-    } else {
-      this.player.stats.currentHealth = this.player.stats.maxHealth;
-      this.player.updateHealthBar();
+
+    const p = this.player.stats;
+    if (p.currentHealth < p.maxHealth) {
+      p.currentHealth = Math.min(p.currentHealth + p.regen, p.maxHealth);
     }
 
     if (this.waveTime <= 0) this.endWave();
@@ -570,6 +611,23 @@ export default class GameScene extends Phaser.Scene {
   endWave() {
     this.isWaveActive = false;
     if (this.waveTimer) this.waveTimer.remove(false);
+    if (this.spawnTimer) this.spawnTimer.remove(false);
+
+    this.spawnIndicator.setVisible(false);
+
+    // Stop any running spawn animations
+    this.tweens.killTweensOf(this.spawnIndicator);
+
+    // Disable all enemies when wave ends
+    this.enemies.getChildren().forEach((enemy) => {
+      if (enemy.isAlive) {
+        enemy.isAlive = false;
+        enemy.healthBar.setVisible(false);
+        enemy.setActive(false);
+        enemy.setVisible(false);
+        if (enemy.body) enemy.body.enable = false;
+      }
+    });
 
     this.pausePlayerInput();
     this.showUpgradeScreen();
@@ -784,6 +842,90 @@ export default class GameScene extends Phaser.Scene {
       this.statsPanel.updateStats(this.player);
     }
   }
+
+  trySpawnEnemy() {
+    if (!this.isWaveActive) return;
+
+    const aliveCount = this.enemies
+      .getChildren()
+      .filter((e) => e.isAlive).length;
+
+    if (aliveCount >= this.currentSpawnLimit) return; // Cap reached - exit
+
+    // Find a safe spawn position
+    let x, y;
+    let attempts = 0; // counter to exit if too many attempts were made
+    const minDistanceFromPlayer = 200;
+
+    do {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 650 + Math.random() * 200;
+      x = this.player.x + Math.cos(angle) * dist;
+      y = this.player.y + Math.sin(angle) * dist;
+
+      // Keep inside arena
+      x = Phaser.Math.Clamp(x, 80, 1200);
+      y = Phaser.Math.Clamp(y, 80, 800);
+
+      attempts++;
+    } while (
+      Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) <
+        minDistanceFromPlayer &&
+      attempts < 12
+    );
+
+    // Show warning
+    this.showSpawnWarning(x, y);
+  }
+
+  showSpawnWarning(x, y) {
+    this.spawnIndicator.setPosition(x, y);
+    this.spawnIndicator.setVisible(true);
+    this.spawnIndicator.setAlpha(0.9);
+    this.spawnIndicator.setScale(0.6);
+
+    // Quick scale-up
+    this.tweens.add({
+      targets: this.spawnIndicator,
+      scale: 1.25,
+      alpha: 0.65,
+      duration: 1500,
+      ease: "Sine.easeOut",
+      onComplete: () => {
+        this.spawnIndicator.setVisible(false);
+
+        // Spawn the enemy
+        const wave = this.wave;
+        let enemy = this.enemyPool.find((e) => !e.active);
+
+        if (!enemy) {
+          enemy = new MagmaEnemy(this, x, y);
+          this.add.existing(enemy);
+          this.enemies.add(enemy);
+          this.enemyPool.push(enemy);
+        } else {
+          enemy.spawn(x, y, wave);
+        }
+      },
+    });
+  }
+
+  onPlayerHitEnemy(player, enemy) {
+    if (enemy.stats && enemy.stats.dmg) {
+      player.takeDamage(enemy.stats.dmg);
+    }
+  }
+
+  onBulletHitEnemy(bullet, enemy) {
+    bullet.setActive(false);
+    bullet.setVisible(false);
+    bullet.body.setVelocity(0, 0);
+
+    if (enemy.takeDamage) {
+      enemy.takeDamage(this.player.stats.atk || 10);
+    }
+  }
+
   /* END-USER-CODE */
 }
 
