@@ -81,6 +81,15 @@ export const allUpgrades = [
       player.updateHealthBar();
     },
   },
+  {
+    rarity: "common",
+    name: "Trample Damage",
+    desc: "Add some nails to the tank tracks! (3 damage)",
+    weight: 30,
+    apply: (player) =>
+      (player.stats.trample = Math.min(player.stats.trample + 3, 100)),
+    condition: (player) => player.stats.trample < 100,
+  },
   // Uncommon - Lower weights
   {
     rarity: "uncommon",
@@ -160,6 +169,15 @@ export const allUpgrades = [
       );
       player.updateHealthBar();
     },
+  },
+  {
+    rarity: "uncommon",
+    name: "Trample Damage",
+    desc: "Add some spikes along the chassis (6 damage)",
+    weight: 18,
+    apply: (player) =>
+      (player.stats.trample = Math.min(player.stats.trample + 6, 100)),
+    condition: (player) => player.stats.trample < 100,
   },
   // Rare - Lowest weights
   {
@@ -246,5 +264,14 @@ export const allUpgrades = [
       player.stats.currentHealth = player.stats.maxHealth;
       player.updateHealthBar();
     },
+  },
+  {
+    rarity: "rare",
+    name: "Trample Damage",
+    desc: "Stud the tracks with titanium spikes (12 damage)",
+    weight: 6,
+    apply: (player) =>
+      (player.stats.trample = Math.min(player.stats.trample + 12, 100)),
+    condition: (player) => player.stats.trample < 100,
   },
 ];
