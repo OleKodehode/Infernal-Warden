@@ -1,0 +1,224 @@
+{
+    "id": "0078bf93-26fa-4ec3-8b6b-1b3b63eee543",
+    "sceneType": "PREFAB",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "8e31a356-b7f4-448d-a390-7225f9257db3",
+            "label": "container_1",
+            "list": [
+                {
+                    "type": "Rectangle",
+                    "id": "f296cdce-09ed-4f7e-b2f2-f87b6a87b467",
+                    "label": "rectangle_1",
+                    "isFilled": true,
+                    "fillColor": "#1e1e1e",
+                    "fillAlpha": 0.75,
+                    "strokeColor": "#b10606",
+                    "lineWidth": 4,
+                    "isStroked": true,
+                    "width": 220,
+                    "height": 280,
+                    "rounded": 12
+                },
+                {
+                    "type": "Text",
+                    "id": "809d5bc6-2955-4f5a-973d-b188154b613d",
+                    "label": "panelTitle",
+                    "x": -41,
+                    "y": -134,
+                    "text": "STATS",
+                    "fontFamily": "Arial",
+                    "fontSize": "26px"
+                },
+                {
+                    "type": "Container",
+                    "id": "90951cbb-48cb-4e9f-8140-f802075b3419",
+                    "label": "statsContainer",
+                    "scope": "CLASS",
+                    "x": -106,
+                    "y": -62,
+                    "list": [
+                        {
+                            "type": "Text",
+                            "id": "49a9c3b3-5479-4912-87e3-647b957199d8",
+                            "label": "hpText",
+                            "x": 5,
+                            "y": -13,
+                            "originY": 0.5,
+                            "text": "HP:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "4700fcfd-aaa1-49e1-b8b9-e318bc96e39d",
+                            "label": "atkText",
+                            "x": 5,
+                            "y": 68,
+                            "originY": 0.5,
+                            "text": "Attack:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "577626bb-f483-45be-995c-b1c9d93f5a6c",
+                            "label": "speedTxt",
+                            "x": 5,
+                            "y": 149,
+                            "originY": 0.5,
+                            "text": "Speed:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "ee48e9e4-abc2-4e01-99a2-f501684cffe9",
+                            "label": "turnText",
+                            "x": 5,
+                            "y": 176,
+                            "originY": 0.5,
+                            "text": "Turn Rate:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "9f6c67a5-93bb-4731-b1fc-0bf39b7b11e1",
+                            "label": "armorTxt",
+                            "x": 5,
+                            "y": 41,
+                            "originY": 0.5,
+                            "text": "Armor:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "3d106829-69c6-4374-b6df-25b701d056e4",
+                            "label": "regenTxt",
+                            "x": 5,
+                            "y": 14,
+                            "originY": 0.5,
+                            "text": "Regen (HPS):"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "70b99252-1ef0-4615-bf84-095a0206edd9",
+                            "label": "projectileTxt",
+                            "x": 5,
+                            "y": 122,
+                            "originY": 0.5,
+                            "text": "Projectiles:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "75c43b4b-4efa-40a6-9854-10c9b7594779",
+                            "label": "fireRateTxt",
+                            "x": 5,
+                            "y": 95,
+                            "originY": 0.5,
+                            "text": "Fire Rate:"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "2e1fc454-05d7-4e34-83fd-26bfe070dd2d",
+                            "label": "hpValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": -13,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "049f96cb-f6a9-44ff-8c49-88aa327d687c",
+                            "label": "regenValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 14,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "c9bfce48-cf7f-4b65-afe4-08afdfcb7156",
+                            "label": "armorValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 41,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "33e167d3-1be5-4692-ab34-074463889056",
+                            "label": "attackValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 68,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "835aeab4-6342-41d9-a398-d7c8aaac2343",
+                            "label": "fireRateValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 95,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "d3e81f82-f19b-4e35-b30f-8cfa486a72b5",
+                            "label": "projectilesValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 122,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "6c43a419-ad35-4813-9cf1-0d789110f82e",
+                            "label": "speedValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 149,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        },
+                        {
+                            "type": "Text",
+                            "id": "269f20ca-7745-4cc2-95fc-627dc82e8914",
+                            "label": "turnRateValue",
+                            "scope": "CLASS",
+                            "x": 130,
+                            "y": 176,
+                            "originY": 0.5,
+                            "text": "VALUE",
+                            "color": "#07df00ff"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

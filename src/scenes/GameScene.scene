@@ -75,6 +75,18 @@
             "scope": "CLASS",
             "list": [
                 {
+                    "prefabId": "0078bf93-26fa-4ec3-8b6b-1b3b63eee543",
+                    "id": "76834449-1239-4156-ac5f-aa3cf3d80f5d",
+                    "unlock": [
+                        "x",
+                        "y"
+                    ],
+                    "label": "statsPanel",
+                    "scope": "CLASS",
+                    "x": 128,
+                    "y": 160
+                },
+                {
                     "type": "Container",
                     "id": "8e2cb620-3172-45bb-844f-b79e7a9e5071",
                     "label": "waveInformation",
