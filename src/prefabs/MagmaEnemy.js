@@ -6,68 +6,85 @@
 /* END-USER-IMPORTS */
 
 export default class MagmaEnemy extends Phaser.GameObjects.Container {
+  constructor(scene, x, y) {
+    super(scene, x ?? 0, y ?? 0);
 
-	constructor(scene, x, y) {
-		super(scene, x ?? 0, y ?? 0);
+    // ellipse_1
+    const ellipse_1 = scene.add.ellipse(30, 30, 60, 60);
+    ellipse_1.setInteractive(
+      new Phaser.Geom.Circle(28, 28, 28),
+      Phaser.Geom.Circle.Contains,
+    );
+    ellipse_1.isFilled = true;
+    ellipse_1.fillColor = 15821830;
+    ellipse_1.isStroked = true;
+    ellipse_1.strokeColor = 16187392;
+    ellipse_1.lineWidth = 4;
+    this.add(ellipse_1);
 
-		// ellipse_1
-		const ellipse_1 = scene.add.ellipse(0, 0, 60, 60);
-		ellipse_1.setInteractive(new Phaser.Geom.Circle(30, 30, 30), Phaser.Geom.Circle.Contains);
-		ellipse_1.setOrigin(0, 0);
-		ellipse_1.isFilled = true;
-		ellipse_1.fillColor = 15821830;
-		ellipse_1.isStroked = true;
-		ellipse_1.strokeColor = 16187392;
-		ellipse_1.lineWidth = 4;
-		this.add(ellipse_1);
+    // healthBar
+    const healthBar = scene.add.container(30, -15);
+    this.add(healthBar);
 
-		// healthBar
-		const healthBar = scene.add.container(30, -15);
-		this.add(healthBar);
+    // healthBg
+    const healthBg = scene.add.rectangle(0, 0, 62, 12);
+    healthBg.isFilled = true;
+    healthBg.fillColor = 3538944;
+    healthBg.isStroked = true;
+    healthBg.strokeColor = 1250067;
+    healthBg.lineWidth = 3;
+    healthBar.add(healthBg);
 
-		// healthBg
-		const healthBg = scene.add.rectangle(0, 0, 62, 12);
-		healthBg.isFilled = true;
-		healthBg.fillColor = 3538944;
-		healthBg.isStroked = true;
-		healthBg.strokeColor = 1250067;
-		healthBg.lineWidth = 3;
-		healthBar.add(healthBg);
+    // healthFill
+    const healthFill = scene.add.rectangle(-30, 0, 60, 10);
+    healthFill.setOrigin(0, 0.5);
+    healthFill.isFilled = true;
+    healthFill.fillColor = 12059395;
+    healthBar.add(healthFill);
 
-		// healthFill
-		const healthFill = scene.add.rectangle(-30, 0, 60, 10);
-		healthFill.setOrigin(0, 0.5);
-		healthFill.isFilled = true;
-		healthFill.fillColor = 12059395;
-		healthBar.add(healthFill);
-
-		/* START-USER-CTR-CODE */
+    /* START-USER-CTR-CODE */
     // Write your code here.
     this.bodySprite = ellipse_1; // Swap out with a sprite later - Just reusing the circle for now
     this.healthBar = healthBar;
     this.healthFill = healthFill;
 
     this.stats = {
-      maxHealth: 20,
-      currentHealth: 20,
+      maxHealth: 10,
+      currentHealth: 10,
       dmg: 10,
       speed: 135,
     };
+    this.stunTime = 0;
 
-    this.isAlive = true;
+    this.isAlive = false;
     this.updateHealthBar();
-    /* END-USER-CTR-CODE */
-	}
 
-	/* START-USER-CODE */
+    this.scene.physics.add.existing(this, false);
+    this.body.setCircle(28);
+    this.body.setDrag(80);
+    this.body.setOffset(0, 0);
+    this.body.setCollideWorldBounds(true);
+    /* END-USER-CTR-CODE */
+  }
+
+  /* START-USER-CODE */
   update(player) {
     if (!this.isAlive || !player) return;
 
-    // face and move towards the player
-    const angle = Phaser.Math.Angle.Between(this.x, this.y, player.x, player.y);
-    this.rotation = angle;
+    if (this.scene.time.now < this.stunTime) return; // Skip movement for a short time.
 
-    this.scene.physics.moveToObject(this, player, this.stats.speed);
+    const dx = player.x - this.x;
+    const dy = player.y - this.y;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < 40) {
+      // stop when very close
+      this.body.setVelocity(0, 0);
+      return;
+    }
+
+    const speed = this.stats.speed;
+    this.body.setVelocity((dx / dist) * speed, (dy / dist) * speed);
   }
 
   updateHealthBar() {
@@ -80,6 +97,12 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
   }
 
   takeDamage(amount) {
+    if (!this.isAlive) return;
+    const now = this.scene.time.now;
+    if (now - this.lastHitTime < 150) return; // 150ms i-frames for enemies
+
+    this.lastHitTime = now;
+
     this.stats.currentHealth -= amount;
     if (this.stats.currentHealth <= 0) {
       this.die();
@@ -119,6 +142,7 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
     this.alpha = 1;
     this.body.enable = true;
     this.healthBar.setVisible(true);
+    this.lastHitTime = 0;
 
     // wave scaling
     const mult = 1 + (wave - 1) * 0.28;
@@ -128,6 +152,7 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
 
     this.isAlive = true;
     this.updateHealthBar();
+    if (this.body) this.body.setVelocity(0, 0); // to prevent any weird velocity issues.
   }
   /* END-USER-CODE */
 }

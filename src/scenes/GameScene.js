@@ -366,22 +366,18 @@ export default class GameScene extends Phaser.Scene {
   lastShot = 0;
   enemyPool = [];
   enemies = null; // Gets set in create
-  spawnIndicator = null;
+  spawnIndicators = []; // pool of indicators
+  lastHitTime = 0;
 
   // Write your code here
 
   create() {
     this.editorCreate();
 
-    // Arena setup
+    // Arena & Camera setup
     // Arena is at 0,0 with width of 1500 and height of 1100s
     this.physics.world.setBounds(0, 0, 1500, 1100);
-
-    // Camera Setup
-    // Camera should see some of the outer bounds
     this.cameras.main.setBounds(-150, -150, 1800, 1400);
-
-    // Putting the player in position and the camera
     this.player.setPosition(750, 550);
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
@@ -410,16 +406,18 @@ export default class GameScene extends Phaser.Scene {
 
     // Enemies
     this.enemies = this.physics.add.group();
-    this.enemyPool = [];
     this.createEnemyPool();
-    this.currentSpawnLimit = 5;
 
-    // Spawn indicator
-    this.spawnIndicator = this.add.image(0, 0, "pentagram");
-    this.spawnIndicator.setScale(1.2);
-    this.spawnIndicator.setAlpha(0.8);
-    this.spawnIndicator.setDepth(1);
-    this.spawnIndicator.setVisible(false);
+    // Spawn indicators - Multiple can be visible at once
+    this.spawnIndicators = [];
+    for (let i = 0; i < 40; i++) {
+      const indicator = this.add.image(0, 0, "pentagram");
+      indicator.setScale(1.2);
+      indicator.setAlpha(0.8);
+      indicator.setDepth(1);
+      indicator.setVisible(false);
+      this.spawnIndicators.push(indicator);
+    }
 
     // Enemy Collisions
     this.physics.add.overlap(
@@ -464,7 +462,6 @@ export default class GameScene extends Phaser.Scene {
 
     // Wave info
     this.wave = 1;
-    this.waveTime = 5; // should start around 30 secs from the first wave, up to 60
     this.isWaveActive = true;
 
     this.startWave();
@@ -598,6 +595,7 @@ export default class GameScene extends Phaser.Scene {
     const p = this.player.stats;
     if (p.currentHealth < p.maxHealth) {
       p.currentHealth = Math.min(p.currentHealth + p.regen, p.maxHealth);
+      this.player.updateHealthBar();
     }
 
     if (this.waveTime <= 0) this.endWave();
@@ -617,10 +615,10 @@ export default class GameScene extends Phaser.Scene {
     if (this.waveTimer) this.waveTimer.remove(false);
     if (this.spawnTimer) this.spawnTimer.remove(false);
 
-    this.spawnIndicator.setVisible(false);
+    this.spawnIndicators.forEach((e) => e.setVisible(false));
 
     // Stop any running spawn animations
-    this.tweens.killTweensOf(this.spawnIndicator);
+    this.tweens.killTweensOf(this.spawnIndicators);
 
     // Disable all enemies when wave ends
     this.enemies.getChildren().forEach((enemy) => {
@@ -791,6 +789,7 @@ export default class GameScene extends Phaser.Scene {
     bullet.setPosition(spawnX, spawnY);
     bullet.setVisible(true);
     bullet.setActive(true);
+    if (bullet.body) bullet.body.enable = true;
     bullet.damage = this.player.stats.atk || 10;
     bullet.setDepth(3);
 
@@ -848,13 +847,17 @@ export default class GameScene extends Phaser.Scene {
   }
 
   trySpawnEnemy() {
+    console.log("Attempting to spawn enemies");
     if (!this.isWaveActive) return;
 
     const aliveCount = this.enemies
       .getChildren()
       .filter((e) => e.isAlive).length;
 
-    if (aliveCount >= this.currentSpawnLimit) return; // Cap reached - exit
+    if (aliveCount >= this.currentSpawnLimit) {
+      console.log("Cap is reached", aliveCount);
+      return;
+    }
 
     // Find a safe spawn position
     let x, y;
@@ -883,26 +886,53 @@ export default class GameScene extends Phaser.Scene {
   }
 
   showSpawnWarning(x, y) {
-    this.spawnIndicator.setPosition(x, y);
-    this.spawnIndicator.setVisible(true);
-    this.spawnIndicator.setAlpha(0.9);
-    this.spawnIndicator.setScale(0.6);
+    // Find unused indicator from the pool
+    let indicator = this.spawnIndicators.find((e) => !e.visible);
 
-    // Quick scale-up
+    if (!indicator) {
+      // Safety fallback - Create a new one on the fly if there are none. Should be unlikely
+      indicator = this.add.image(0, 0, "pentagram");
+      indicator.setScale(1.2);
+      indicator.setAlpha(0.8);
+      indicator.setDepth(1);
+      this.spawnIndicators.push(indicator);
+    }
+
+    indicator.setPosition(x, y);
+    indicator.setVisible(true);
+    indicator.setAlpha(0.9);
+    indicator.setScale(0.6);
+
+    // Scale up animation + spawn enemy afterwards
     this.tweens.add({
-      targets: this.spawnIndicator,
+      targets: indicator,
       scale: 1.25,
       alpha: 0.65,
       duration: 1500,
       ease: "Sine.easeOut",
       onComplete: () => {
-        this.spawnIndicator.setVisible(false);
+        indicator.setVisible(false);
 
-        // Spawn the enemy
+        // Safety check - Is the player too close?
+        const finalDistance = Phaser.Math.Distance.Between(
+          x,
+          y,
+          this.player.x,
+          this.player.y,
+        );
+
+        if (finalDistance < 180) {
+          console.log("Player too close");
+          this.trySpawnEnemy();
+          return;
+        }
+
+        // Spawn/ reuse the enemy
         const wave = this.wave;
         let enemy = this.enemyPool.find((e) => !e.active);
 
         if (!enemy) {
+          // fallback if there are no enemies available in pool - Unlikely
           enemy = new MagmaEnemy(this, x, y);
           this.add.existing(enemy);
           this.enemies.add(enemy);
@@ -915,15 +945,42 @@ export default class GameScene extends Phaser.Scene {
   }
 
   onPlayerHitEnemy(player, enemy) {
+    const now = this.time.now;
+    if (now - this.lastHitTime < 800) return; // 800ms i-frames
+
+    this.lastHitTime = now;
+
     if (enemy.stats && enemy.stats.dmg) {
       player.takeDamage(enemy.stats.dmg);
+    }
+
+    // Tank trample damage
+    if (enemy.takeDamage) {
+      const trample = player.stats.trample || 6; // 6 is default
+      enemy.takeDamage(trample);
+
+      // Apply a stn timer
+      enemy.stunTime = now + 400;
+
+      // gentle knockback
+      const dx = enemy.x - player.x;
+      const dy = enemy.y - player.y;
+      const dist = Math.hypot(dx, dy) || 1;
+
+      const knockbackForce = 50;
+      enemy.body.setVelocity(
+        (dx / dist) * knockbackForce,
+        (dy / dist) * knockbackForce,
+      );
     }
   }
 
   onBulletHitEnemy(bullet, enemy) {
+    if (!bullet.active) return;
     bullet.setActive(false);
     bullet.setVisible(false);
     bullet.body.setVelocity(0, 0);
+    bullet.body.enable = false;
 
     if (enemy.takeDamage) {
       enemy.takeDamage(this.player.stats.atk || 10);

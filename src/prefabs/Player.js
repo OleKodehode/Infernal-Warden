@@ -12,9 +12,9 @@ export default class Player extends Phaser.GameObjects.Container {
     this.scaleX = 1.5;
     this.scaleY = 1.5;
     scene.physics.add.existing(this, false);
+    this.body.setCircle(32);
+    this.body.setOffset(-32, -32);
     this.body.collideWorldBounds = true;
-    this.body.setOffset(-30, -30);
-    this.body.setSize(60, 60, false);
 
     // healthBar
     const healthBar = scene.add.container(0, 40);
@@ -61,6 +61,7 @@ export default class Player extends Phaser.GameObjects.Container {
       projectiles: 1,
       regen: 1.0,
       armor: 0,
+      trample: 6,
     };
     this.muzzleOffset = 58;
     this.isAlive = true;
