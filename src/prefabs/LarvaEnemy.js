@@ -62,8 +62,8 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
 
     // Physics
     this.scene.physics.add.existing(this, false);
-    this.body.setCircle(40);
-    this.body.setOffset(-40, -20);
+    this.body.setCircle(38);
+    this.body.setOffset(-38, -38);
     this.body.setDrag(80);
     this.body.setCollideWorldBounds(true);
     /* END-USER-CTR-CODE */
@@ -118,12 +118,13 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
         const spawnY = this.y + Math.sin(angle) * 50;
         this.scene.fireEnemyBullet(spawnX, spawnY, angle, this.stats.dmg);
 
-        if (dist > MIN_RANGE) {
+        if (dist < MIN_RANGE) {
           this.chargeStartTime = now;
-          this.isCharging = false;
+          this.isCharging = true;
+        } else {
+          // if (this.bodySprite) this.bodySprite.clearTint();
+          if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
         }
-        // if (this.bodySprite) this.bodySprite.clearTint();
-        if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
       }
     }
   }
