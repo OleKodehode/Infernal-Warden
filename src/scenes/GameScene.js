@@ -4,6 +4,7 @@
 
 import Player from "../prefabs/Player.js";
 /* START-USER-IMPORTS */
+import { allUpgrades } from "../utils/upgrades.js";
 /* END-USER-IMPORTS */
 
 export default class GameScene extends Phaser.Scene {
@@ -350,197 +351,6 @@ export default class GameScene extends Phaser.Scene {
   preload() {
     this.load.pack("Init-Asset-Pack", "assets/Init-Asset-Pack.json");
   }
-  // =========== Upgrade System ===========
-  allUpgrades = [
-    // Common upgrades - Higher weights
-    {
-      rarity: "common",
-      name: "Fire Power",
-      desc: "+2 Attack",
-      weight: 35,
-      apply: () => (this.player.stats.atk += 2),
-      condition: () => this.player.stats.atk < 100,
-    },
-    {
-      rarity: "common",
-      name: "Speed Boost",
-      desc: "Small speed boost (20)",
-      weight: 30,
-      apply: () => (this.player.stats.speed += 20),
-      condition: () => this.player.stats.speed < 600,
-    },
-    {
-      rarity: "common",
-      name: "Better Handle",
-      desc: "A little better turning rate (0.0025)",
-      weight: 25,
-      apply: () => (this.player.stats.turnSpeed += 0.0025),
-      condition: () => this.player.stats.turnSpeed < 0.1,
-    },
-    {
-      rarity: "common",
-      name: "Reinforced Armor",
-      desc: "+1 armor",
-      weight: 30,
-      apply: () => this.player.stats.armor++,
-    },
-    {
-      rarity: "common",
-      name: "More Bulk",
-      desc: "+20 HP",
-      weight: 30,
-      apply: () => {
-        this.player.stats.maxHealth += 20;
-        this.player.stats.currentHealth += 20;
-        this.player.updateHealthBar();
-      },
-      condition: () => this.player.stats.maxHealth < 1000,
-    },
-    {
-      rarity: "common",
-      name: "Passive Repair",
-      desc: "+0.5 health per second",
-      weight: 25,
-      apply: () => (this.player.stats.regen += 0.5),
-      condition: () => this.player.stats.regen < 50,
-    },
-    {
-      rarity: "common",
-      name: "Patch up",
-      desc: "repairs 20% of max health",
-      weight: 30,
-      apply: () =>
-        (this.player.stats.currentHealth += this.player.stats.maxHealth * 0.2),
-    },
-    // Uncommon - Lower weights
-    {
-      rarity: "uncommon",
-      name: "Fire Power",
-      desc: "+4 attack",
-      apply: () => (this.player.stats.atk += 4),
-      weight: 15,
-      condition: () => this.player.stats.atk < 100,
-    },
-    {
-      rarity: "uncommon",
-      name: "Speed Boost",
-      desc: "Medium speed boost (40)",
-      apply: () => (this.player.stats.speed += 40),
-      condition: () => this.player.stats.speed < 600,
-      weight: 13,
-    },
-    {
-      rarity: "uncommon",
-      name: "Better Handling",
-      desc: "Better turn rate (0.005)",
-      apply: () => (this.player.stats.turnSpeed += 0.005),
-      condition: () => this.player.stats.turnSpeed < 0.1,
-      weight: 12,
-    },
-    {
-      rarity: "uncommon",
-      name: "Reinforced Armor",
-      desc: "+2 armor",
-      apply: () => (this.player.stats.armor += 2),
-      weight: 12,
-    },
-    {
-      rarity: "uncommon",
-      name: "More Bulk",
-      desc: "+40 HP",
-      apply: () => {
-        this.player.stats.maxHealth += 40;
-        this.player.stats.currentHealth += 40;
-        this.player.updateHealthBar();
-      },
-      weight: 12,
-      condition: () => this.player.stats.maxHealth < 1000,
-    },
-    {
-      rarity: "uncommon",
-      name: "Passive Repair",
-      desc: "+1 HP per second",
-      apply: () => (this.player.stats.regen += 1),
-      weight: 11,
-      condition: () => this.player.stats.regen < 50,
-    },
-    {
-      rarity: "common",
-      name: "Patch up",
-      desc: "repairs 50% of max health",
-      weight: 15,
-      apply: () =>
-        (this.player.stats.currentHealth += this.player.stats.maxHealth * 0.5),
-    },
-    // Rare - Lowest weights
-    {
-      rarity: "rare",
-      name: "Fire Power",
-      desc: "+8 attack",
-      apply: () => (this.player.stats.atk += 8),
-      weight: 8,
-      condition: () => this.player.stats.atk < 100,
-    },
-    {
-      rarity: "rare",
-      name: "Speed Boost",
-      desc: "Big speed boost! (80)",
-      apply: () => (this.player.stats.speed += 80),
-      condition: () => this.player.stats.speed < 600,
-      weight: 7,
-    },
-    {
-      rarity: "rare",
-      name: "Better Handling",
-      desc: "A lot better turning! (0.01)",
-      apply: () => (this.player.stats.turnSpeed += 0.01),
-      condition: () => this.player.stats.turnSpeed < 0.1,
-      weight: 6,
-    },
-    {
-      rarity: "rare",
-      name: "Reinforced Armor",
-      desc: "+5 armor",
-      apply: () => (this.player.stats.armor += 5),
-      weight: 7,
-    },
-    {
-      rarity: "rare",
-      name: "More Bulk",
-      desc: "+100 HP",
-      apply: () => {
-        this.player.stats.maxHealth += 100;
-        this.player.stats.currentHealth += 100;
-        this.player.updateHealthBar();
-      },
-      weight: 6,
-      condition: () => this.player.stats.maxHealth < 1000,
-    },
-    {
-      rarity: "rare",
-      name: "Passive Repair",
-      desc: "+2 HP per second",
-      apply: () => (this.player.stats.regen += 2),
-      weight: 5,
-      condition: () => this.player.stats.regen < 50,
-    },
-    {
-      rarity: "rare",
-      name: "Extra Projectile",
-      desc: "+1 projectiles with each attack (max 4)",
-      apply: () => this.player.stats.projectiles++,
-      weight: 5,
-      condition: () => this.player.stats.projectiles < 4,
-    },
-    {
-      rarity: "rare",
-      name: "Patch up",
-      desc: "Full repair",
-      weight: 10,
-      apply: () =>
-        (this.player.stats.currentHealth = this.player.stats.maxHealth),
-    },
-  ];
 
   bullets = [];
   bulletPoolSize = 100;
@@ -577,7 +387,6 @@ export default class GameScene extends Phaser.Scene {
       test: "SPACE",
     });
     this.input.gamepad.once("connected", (pad) => (this.pad = pad));
-    console.log(this.input.gamepad.pad1);
 
     // Physics
     this.player.body.setDamping(true);
@@ -764,8 +573,8 @@ export default class GameScene extends Phaser.Scene {
     // Extra safety
     this.pausePlayerInput();
 
-    let available = this.allUpgrades.filter(
-      (upg) => !upg.condition || upg.condition(),
+    let available = allUpgrades.filter(
+      (upg) => !upg.condition || upg.condition(this.player),
     );
 
     // Pick 3 random upgrades using weights
@@ -780,7 +589,7 @@ export default class GameScene extends Phaser.Scene {
 
     // Fallback if we somehow have less than 3
     while (chosen.length < 3) {
-      chosen.push(this.allUpgrades[6]); // 20% HP recovery
+      chosen.push(allUpgrades[6]); // 20% HP recovery - I know, magic number.
     }
 
     // Helper function
@@ -847,7 +656,7 @@ export default class GameScene extends Phaser.Scene {
       btn.on("pointerout", () => btn.setScale(1));
       // button action
       btn.on("pointerdown", () => {
-        upgrade.apply();
+        upgrade.apply(this.player);
         this.upgradeScreen.setVisible(false);
         this.resumePlayerInput();
         this.wave += 1;
