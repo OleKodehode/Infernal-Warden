@@ -146,9 +146,9 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
 
     // wave scaling
     const mult = 1 + (wave - 1) * 0.28;
-    this.stats.maxHealth = Math.floor(35 * mult);
+    this.stats.maxHealth = Math.floor(15 * mult);
     this.stats.currentHealth = this.stats.maxHealth;
-    this.stats.dmg = Math.floor(12 * (1 + (wave - 1) * 0.18));
+    this.stats.dmg = Math.floor(10 * (1 + (wave - 1) * 0.18));
 
     this.isAlive = true;
     this.updateHealthBar();
