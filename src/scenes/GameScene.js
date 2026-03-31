@@ -577,6 +577,7 @@ export default class GameScene extends Phaser.Scene {
       test: "SPACE",
     });
     this.input.gamepad.once("connected", (pad) => (this.pad = pad));
+    console.log(this.input.gamepad.pad1);
 
     // Physics
     this.player.body.setDamping(true);
@@ -663,7 +664,7 @@ export default class GameScene extends Phaser.Scene {
       console.log(this.player.stats.currentHealth);
     }
 
-    if (this.input.activePointer.isDown) {
+    if (this.input.activePointer.isDown || this.pad?.A) {
       this.tryShoot();
     }
 
@@ -767,8 +768,6 @@ export default class GameScene extends Phaser.Scene {
       (upg) => !upg.condition || upg.condition(),
     );
 
-    console.log(available);
-
     // Pick 3 random upgrades using weights
     const chosen = [];
     for (let i = 0; i < 3; i++) {
@@ -783,8 +782,6 @@ export default class GameScene extends Phaser.Scene {
     while (chosen.length < 3) {
       chosen.push(this.allUpgrades[6]); // 20% HP recovery
     }
-
-    console.log(chosen);
 
     // Helper function
     this.applyUpgradeToBox(this.upgrade1, chosen[0]);
@@ -814,7 +811,7 @@ export default class GameScene extends Phaser.Scene {
         : box === this.upgrade2
           ? this.upgradeBtn2
           : this.upgradeBtn3;
-    console.log(upgrade);
+
     if (nameTxt) nameTxt.setText(upgrade.name);
     if (descTxt) descTxt.setText(upgrade.desc);
 
