@@ -6,7 +6,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Fire Power",
     desc: "Another firecracker added to the ammo (2 attack)",
-    weight: 35,
+    weight: 32,
     apply: (player) => (player.stats.atk = Math.min(player.stats.atk + 2, 100)),
     condition: (player) => player.stats.atk < 100,
   },
@@ -14,7 +14,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Fire Rate",
     desc: "Polish the inside of the barrel a bit (-50 ms)",
-    weight: 30,
+    weight: 28,
     apply: (player) =>
       (player.stats.fireRate = Math.max(player.stats.fireRate - 50, 500)),
     condition: (player) => player.stats.fireRate > 500,
@@ -32,7 +32,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Better Handle",
     desc: "Maybe some butter will help the turning.. (0.002 turn rate)",
-    weight: 25,
+    weight: 24,
     apply: (player) =>
       (player.stats.turnSpeed = Math.min(player.stats.turnSpeed + 0.002, 0.03)),
     condition: (player) => player.stats.turnSpeed < 0.03,
@@ -41,14 +41,14 @@ export const allUpgrades = [
     rarity: "common",
     name: "Reinforced Armor",
     desc: "An extra armor plate (1 armor)",
-    weight: 30,
+    weight: 28,
     apply: (player) => player.stats.armor++,
   },
   {
     rarity: "common",
     name: "More Bulk",
     desc: "Put in some pillows for comfort and structure (20 HP)",
-    weight: 30,
+    weight: 29,
     apply: (player) => {
       player.stats.maxHealth = Math.min(player.stats.maxHealth + 20, 800);
       player.stats.currentHealth = Math.min(
@@ -63,7 +63,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Passive Repair",
     desc: "Rolls of duct tape (1 hps)",
-    weight: 25,
+    weight: 26,
     apply: (player) =>
       (player.stats.regen = Math.min(player.stats.regen + 1, 20)),
     condition: (player) => player.stats.regen < 20,
@@ -72,7 +72,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Patch up",
     desc: "Need some band-aids? (20% HP recovered)",
-    weight: 30,
+    weight: 28,
     apply: (player) => {
       player.stats.currentHealth = Math.min(
         player.stats.currentHealth + player.stats.maxHealth * 0.2,
@@ -85,7 +85,7 @@ export const allUpgrades = [
     rarity: "common",
     name: "Trample Damage",
     desc: "Add some nails to the tank tracks! (3 damage)",
-    weight: 30,
+    weight: 27,
     apply: (player) =>
       (player.stats.trample = Math.min(player.stats.trample + 3, 100)),
     condition: (player) => player.stats.trample < 100,
@@ -131,7 +131,7 @@ export const allUpgrades = [
     name: "Reinforced Armor",
     desc: "A couple of plates (2 armor)",
     apply: (player) => (player.stats.armor += 2),
-    weight: 12,
+    weight: 15,
   },
   {
     rarity: "uncommon",
@@ -145,7 +145,7 @@ export const allUpgrades = [
       );
       player.updateHealthBar();
     },
-    weight: 12,
+    weight: 14,
     condition: (player) => player.stats.maxHealth < 800,
   },
   {
@@ -154,7 +154,7 @@ export const allUpgrades = [
     desc: "Some more automated drones to repair (2.5 HPS)",
     apply: (player) =>
       (player.stats.regen = Math.min(player.stats.regen + 2.5, 20)),
-    weight: 11,
+    weight: 12,
     condition: (player) => player.stats.regen < 20,
   },
   {
@@ -174,7 +174,7 @@ export const allUpgrades = [
     rarity: "uncommon",
     name: "Trample Damage",
     desc: "Add some spikes along the chassis (6 damage)",
-    weight: 18,
+    weight: 17,
     apply: (player) =>
       (player.stats.trample = Math.min(player.stats.trample + 6, 100)),
     condition: (player) => player.stats.trample < 100,
@@ -218,9 +218,9 @@ export const allUpgrades = [
   {
     rarity: "rare",
     name: "Reinforced Armor",
-    desc: "The best armor plates around (5 armor)",
-    apply: (player) => (player.stats.armor += 5),
-    weight: 7,
+    desc: "The best armor plates around (4 armor)",
+    apply: (player) => (player.stats.armor += 4),
+    weight: 9,
   },
   {
     rarity: "rare",
@@ -269,7 +269,7 @@ export const allUpgrades = [
     rarity: "rare",
     name: "Trample Damage",
     desc: "Stud the tracks with titanium spikes (12 damage)",
-    weight: 6,
+    weight: 7,
     apply: (player) =>
       (player.stats.trample = Math.min(player.stats.trample + 12, 100)),
     condition: (player) => player.stats.trample < 100,

@@ -56,7 +56,7 @@ export default class Player extends Phaser.GameObjects.Container {
       turnSpeed: 0.01,
       maxHealth: 100.0,
       currentHealth: 100.0,
-      atk: 10,
+      atk: 12,
       fireRate: 1000,
       projectiles: 1,
       regen: 1.0,
@@ -114,7 +114,7 @@ export default class Player extends Phaser.GameObjects.Container {
     if (!this.isAlive) return;
 
     // Armor reduction (max 70% reduction)
-    const reduction = Math.min(this.stats.armor * 0.085, 0.7);
+    const reduction = Math.min(this.stats.armor * 0.035, 0.7);
     const finalDamage = Math.max(Math.floor(amount * (1 - reduction)), 1);
 
     this.stats.currentHealth -= finalDamage;
