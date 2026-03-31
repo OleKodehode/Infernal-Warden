@@ -113,7 +113,11 @@ export default class Player extends Phaser.GameObjects.Container {
   takeDamage(amount) {
     if (!this.isAlive) return;
 
-    this.stats.currentHealth -= amount;
+    // Armor reduction (max 70% reduction)
+    const reduction = Math.min(this.stats.armor * 0.085, 0.7);
+    const finalDamage = Math.max(Math.floor(amount * (1 - reduction)), 1);
+
+    this.stats.currentHealth -= finalDamage;
     if (this.stats.currentHealth < 0) this.stats.currentHealth = 0;
     this.updateHealthBar();
 
@@ -129,7 +133,7 @@ export default class Player extends Phaser.GameObjects.Container {
 
     // Visual death feedback
     this.chassis.setTint(0x880000);
-    this.turret.setTint(0x880000);
+    this.turret.setVisible(false);
 
     // Freeze the tank completely
     this.body.setVelocity(0, 0);

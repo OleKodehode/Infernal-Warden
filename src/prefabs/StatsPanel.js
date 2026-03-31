@@ -31,116 +31,130 @@ export default class StatsPanel extends Phaser.GameObjects.Container {
     this.add(statsContainer);
 
     // hpText
-    const hpText = scene.add.text(5, -13, "", {});
+    const hpText = scene.add.text(4.888888888888889, -32, "", {});
     hpText.setOrigin(0, 0.5);
     hpText.text = "HP:";
     hpText.setStyle({});
     statsContainer.add(hpText);
 
     // atkText
-    const atkText = scene.add.text(5, 68, "", {});
+    const atkText = scene.add.text(4.888888888888889, 49, "", {});
     atkText.setOrigin(0, 0.5);
     atkText.text = "Attack:";
     atkText.setStyle({});
     statsContainer.add(atkText);
 
     // speedTxt
-    const speedTxt = scene.add.text(5, 149, "", {});
+    const speedTxt = scene.add.text(4.888888888888889, 130, "", {});
     speedTxt.setOrigin(0, 0.5);
     speedTxt.text = "Speed:";
     speedTxt.setStyle({});
     statsContainer.add(speedTxt);
 
     // turnText
-    const turnText = scene.add.text(5, 176, "", {});
+    const turnText = scene.add.text(4.888888888888889, 157, "", {});
     turnText.setOrigin(0, 0.5);
     turnText.text = "Turn Rate:";
     turnText.setStyle({});
     statsContainer.add(turnText);
 
     // armorTxt
-    const armorTxt = scene.add.text(5, 41, "", {});
+    const armorTxt = scene.add.text(4.888888888888889, 22, "", {});
     armorTxt.setOrigin(0, 0.5);
     armorTxt.text = "Armor:";
     armorTxt.setStyle({});
     statsContainer.add(armorTxt);
 
     // regenTxt
-    const regenTxt = scene.add.text(5, 14, "", {});
+    const regenTxt = scene.add.text(4.888888888888889, -5, "", {});
     regenTxt.setOrigin(0, 0.5);
     regenTxt.text = "Regen (HPS):";
     regenTxt.setStyle({});
     statsContainer.add(regenTxt);
 
     // projectileTxt
-    const projectileTxt = scene.add.text(5, 122, "", {});
+    const projectileTxt = scene.add.text(4.888888888888889, 103, "", {});
     projectileTxt.setOrigin(0, 0.5);
     projectileTxt.text = "Projectiles:";
     projectileTxt.setStyle({});
     statsContainer.add(projectileTxt);
 
     // fireRateTxt
-    const fireRateTxt = scene.add.text(5, 95, "", {});
+    const fireRateTxt = scene.add.text(4.888888888888889, 76, "", {});
     fireRateTxt.setOrigin(0, 0.5);
     fireRateTxt.text = "Fire Rate:";
     fireRateTxt.setStyle({});
     statsContainer.add(fireRateTxt);
 
     // hpValue
-    const hpValue = scene.add.text(130, -13, "", {});
+    const hpValue = scene.add.text(129.88888888888889, -32, "", {});
     hpValue.setOrigin(0, 0.5);
     hpValue.text = "VALUE";
     hpValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(hpValue);
 
     // regenValue
-    const regenValue = scene.add.text(130, 14, "", {});
+    const regenValue = scene.add.text(129.88888888888889, -5, "", {});
     regenValue.setOrigin(0, 0.5);
     regenValue.text = "VALUE";
     regenValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(regenValue);
 
     // armorValue
-    const armorValue = scene.add.text(130, 41, "", {});
+    const armorValue = scene.add.text(129.88888888888889, 22, "", {});
     armorValue.setOrigin(0, 0.5);
     armorValue.text = "VALUE";
     armorValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(armorValue);
 
     // attackValue
-    const attackValue = scene.add.text(130, 68, "", {});
+    const attackValue = scene.add.text(129.88888888888889, 49, "", {});
     attackValue.setOrigin(0, 0.5);
     attackValue.text = "VALUE";
     attackValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(attackValue);
 
     // fireRateValue
-    const fireRateValue = scene.add.text(130, 95, "", {});
+    const fireRateValue = scene.add.text(129.88888888888889, 76, "", {});
     fireRateValue.setOrigin(0, 0.5);
     fireRateValue.text = "VALUE";
     fireRateValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(fireRateValue);
 
     // projectilesValue
-    const projectilesValue = scene.add.text(130, 122, "", {});
+    const projectilesValue = scene.add.text(129.88888888888889, 103, "", {});
     projectilesValue.setOrigin(0, 0.5);
     projectilesValue.text = "VALUE";
     projectilesValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(projectilesValue);
 
     // speedValue
-    const speedValue = scene.add.text(130, 149, "", {});
+    const speedValue = scene.add.text(129.88888888888889, 130, "", {});
     speedValue.setOrigin(0, 0.5);
     speedValue.text = "VALUE";
     speedValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(speedValue);
 
     // turnRateValue
-    const turnRateValue = scene.add.text(130, 176, "", {});
+    const turnRateValue = scene.add.text(129.88888888888889, 157, "", {});
     turnRateValue.setOrigin(0, 0.5);
     turnRateValue.text = "VALUE";
     turnRateValue.setStyle({ color: "#07df00ff" });
     statsContainer.add(turnRateValue);
+
+    // trampleTxt
+    const trampleTxt = scene.add.text(4.888888888888889, 184, "", {});
+    trampleTxt.setOrigin(0, 0.5);
+    trampleTxt.text = "Trample:";
+    trampleTxt.setStyle({});
+    statsContainer.add(trampleTxt);
+
+    // trampleValue
+    const trampleValue = scene.add.text(129.88888888888889, 184, "", {});
+    trampleValue.setOrigin(0, 0.5);
+    trampleValue.text = "VALUE";
+    trampleValue.setStyle({ color: "#07df00ff" });
+    statsContainer.add(trampleValue);
 
     this.hpValue = hpValue;
     this.regenValue = regenValue;
@@ -150,6 +164,7 @@ export default class StatsPanel extends Phaser.GameObjects.Container {
     this.projectilesValue = projectilesValue;
     this.speedValue = speedValue;
     this.turnRateValue = turnRateValue;
+    this.trampleValue = trampleValue;
     this.statsContainer = statsContainer;
 
     /* START-USER-CTR-CODE */
@@ -173,6 +188,8 @@ export default class StatsPanel extends Phaser.GameObjects.Container {
   speedValue;
   /** @type {Phaser.GameObjects.Text} */
   turnRateValue;
+  /** @type {Phaser.GameObjects.Text} */
+  trampleValue;
   /** @type {Phaser.GameObjects.Container} */
   statsContainer;
 
@@ -194,6 +211,7 @@ export default class StatsPanel extends Phaser.GameObjects.Container {
     this.projectilesValue.setText(stats.projectiles);
     this.speedValue.setText(stats.speed);
     this.turnRateValue.setText(stats.turnSpeed.toFixed(3));
+    this.trampleValue.setText(stats.trample);
 
     // Dynamic Colors
     const setValueColor = (textObj, current, max) => {
@@ -214,6 +232,7 @@ export default class StatsPanel extends Phaser.GameObjects.Container {
     setValueColor(this.turnRateValue, stats.turnSpeed, 0.03);
     setValueColor(this.regenValue, stats.regen, 20);
     setValueColor(this.projectilesValue, stats.projectiles, 4);
+    setValueColor(this.trampleValue, stats.trample, 100);
     // Armor doesn't have a cap
 
     if (stats.currentHealth / stats.maxHealth < 0.3) {
