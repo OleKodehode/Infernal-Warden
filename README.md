@@ -1,16 +1,3 @@
-# Basic JavaScript project template for Phaser Editor v5 and Box2D.
+# Infernal Warden - Topdown wave shooter
 
-This is a Phaser Editor v5 project template. It includes Box2D library and a scene with a simple example of a Box2D world.
-
-## Configuration
-
-* It is coded in JavaScript.
-* It includes a VS Code project configuration (`jsconfig.json` file) and the type definitions (in the `types/` folder).
-
-## Script Nodes
-
-Script nodes are logic objects. You can add a script node to the scene or a game object, for extending it with custom data and behavior.
-
-This project includes the script libraries:
-
-- [@phaserjs/editor-scripts-base](https://github.com/phaserjs/editor-scripts-base)
+A small game made in Phaser using the Phaser Editor. Made during a small "game jam" during my stay at the web developer course Kodehode in Norway.
