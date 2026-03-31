@@ -25,6 +25,8 @@
                     "hitArea.x": 30,
                     "hitArea.y": 30,
                     "hitArea.radius": 30,
+                    "originX": 0,
+                    "originY": 0,
                     "isFilled": true,
                     "fillColor": "#f16c06",
                     "strokeColor": "#f70000",
@@ -37,7 +39,8 @@
                     "type": "Container",
                     "id": "eeb0ecd8-60f8-4750-921b-c3a16413fb33",
                     "label": "healthBar",
-                    "y": -50,
+                    "x": 30,
+                    "y": -15,
                     "list": [
                         {
                             "type": "Rectangle",

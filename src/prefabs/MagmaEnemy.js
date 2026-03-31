@@ -6,43 +6,42 @@
 /* END-USER-IMPORTS */
 
 export default class MagmaEnemy extends Phaser.GameObjects.Container {
-  constructor(scene, x, y) {
-    super(scene, x ?? 0, y ?? 0);
 
-    // ellipse_1
-    const ellipse_1 = scene.add.ellipse(0, 0, 60, 60);
-    ellipse_1.setInteractive(
-      new Phaser.Geom.Circle(30, 30, 30),
-      Phaser.Geom.Circle.Contains,
-    );
-    ellipse_1.isFilled = true;
-    ellipse_1.fillColor = 15821830;
-    ellipse_1.isStroked = true;
-    ellipse_1.strokeColor = 16187392;
-    ellipse_1.lineWidth = 4;
-    this.add(ellipse_1);
+	constructor(scene, x, y) {
+		super(scene, x ?? 0, y ?? 0);
 
-    // healthBar
-    const healthBar = scene.add.container(0, -50);
-    this.add(healthBar);
+		// ellipse_1
+		const ellipse_1 = scene.add.ellipse(0, 0, 60, 60);
+		ellipse_1.setInteractive(new Phaser.Geom.Circle(30, 30, 30), Phaser.Geom.Circle.Contains);
+		ellipse_1.setOrigin(0, 0);
+		ellipse_1.isFilled = true;
+		ellipse_1.fillColor = 15821830;
+		ellipse_1.isStroked = true;
+		ellipse_1.strokeColor = 16187392;
+		ellipse_1.lineWidth = 4;
+		this.add(ellipse_1);
 
-    // healthBg
-    const healthBg = scene.add.rectangle(0, 0, 62, 12);
-    healthBg.isFilled = true;
-    healthBg.fillColor = 3538944;
-    healthBg.isStroked = true;
-    healthBg.strokeColor = 1250067;
-    healthBg.lineWidth = 3;
-    healthBar.add(healthBg);
+		// healthBar
+		const healthBar = scene.add.container(30, -15);
+		this.add(healthBar);
 
-    // healthFill
-    const healthFill = scene.add.rectangle(-30, 0, 60, 10);
-    healthFill.setOrigin(0, 0.5);
-    healthFill.isFilled = true;
-    healthFill.fillColor = 12059395;
-    healthBar.add(healthFill);
+		// healthBg
+		const healthBg = scene.add.rectangle(0, 0, 62, 12);
+		healthBg.isFilled = true;
+		healthBg.fillColor = 3538944;
+		healthBg.isStroked = true;
+		healthBg.strokeColor = 1250067;
+		healthBg.lineWidth = 3;
+		healthBar.add(healthBg);
 
-    /* START-USER-CTR-CODE */
+		// healthFill
+		const healthFill = scene.add.rectangle(-30, 0, 60, 10);
+		healthFill.setOrigin(0, 0.5);
+		healthFill.isFilled = true;
+		healthFill.fillColor = 12059395;
+		healthBar.add(healthFill);
+
+		/* START-USER-CTR-CODE */
     // Write your code here.
     this.bodySprite = ellipse_1; // Swap out with a sprite later - Just reusing the circle for now
     this.healthBar = healthBar;
@@ -58,9 +57,9 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
     this.isAlive = true;
     this.updateHealthBar();
     /* END-USER-CTR-CODE */
-  }
+	}
 
-  /* START-USER-CODE */
+	/* START-USER-CODE */
   update(player) {
     if (!this.isAlive || !player) return;
 

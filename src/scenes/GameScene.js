@@ -365,9 +365,7 @@ export default class GameScene extends Phaser.Scene {
   bulletPoolSize = 100;
   lastShot = 0;
   enemyPool = [];
-  enemyPoolSize = 50;
-  enemies = this.physics.add.group();
-  currentSpawnLimit = 8;
+  enemies = null; // Gets set in create
   spawnIndicator = null;
 
   // Write your code here
@@ -409,6 +407,19 @@ export default class GameScene extends Phaser.Scene {
 
     // Bullet pool
     this.createBulletPool();
+
+    // Enemies
+    this.enemies = this.physics.add.group();
+    this.enemyPool = [];
+    this.createEnemyPool();
+    this.currentSpawnLimit = 5;
+
+    // Spawn indicator
+    this.spawnIndicator = this.add.image(0, 0, "pentagram");
+    this.spawnIndicator.setScale(1.2);
+    this.spawnIndicator.setAlpha(0.8);
+    this.spawnIndicator.setDepth(1);
+    this.spawnIndicator.setVisible(false);
 
     // Enemy Collisions
     this.physics.add.overlap(
@@ -458,13 +469,6 @@ export default class GameScene extends Phaser.Scene {
 
     this.startWave();
     this.playerCanMove = true;
-
-    // Spawn indicator
-    this.spawnIndicator = this.add.image(0, 0, "pentagram");
-    this.spawnIndicator.setScale(1.2);
-    this.spawnIndicator.setAlpha(0.8);
-    this.spawnIndicator.setDepth(1);
-    this.spawnIndicator.setVisible(false);
   }
 
   update() {
@@ -923,6 +927,18 @@ export default class GameScene extends Phaser.Scene {
 
     if (enemy.takeDamage) {
       enemy.takeDamage(this.player.stats.atk || 10);
+    }
+  }
+
+  createEnemyPool() {
+    for (let i = 0; i < 100; i++) {
+      // 100 enemy pool - Increase if necessary
+      const enemy = new MagmaEnemy(this, -2000, -2000); // Spawn off-screen
+      enemy.setActive(false);
+      enemy.setVisible(false);
+      this.add.existing(enemy);
+      this.enemies.add(enemy);
+      this.enemyPool.push(enemy);
     }
   }
 
