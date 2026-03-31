@@ -1,0 +1,77 @@
+{
+    "id": "3d6b263c-7bb9-473e-ba76-fbfe6977ff10",
+    "sceneType": "PREFAB",
+    "settings": {
+        "exportClass": true,
+        "autoImport": true,
+        "importFileExtension": true,
+        "preloadMethodName": "",
+        "preloadPackFiles": [],
+        "createMethodName": "",
+        "borderWidth": 1280,
+        "borderHeight": 800
+    },
+    "displayList": [
+        {
+            "type": "Container",
+            "id": "6b62ac13-01ce-4049-8ad4-696ca5b99665",
+            "label": "container_1",
+            "list": [
+                {
+                    "type": "Ellipse",
+                    "id": "6dd9e67e-29f2-4a18-9089-380cd7afd9e2",
+                    "label": "ellipse_1",
+                    "hitArea.shape": "CIRCLE",
+                    "hitArea.x": 30,
+                    "hitArea.y": 30,
+                    "hitArea.radius": 30,
+                    "isFilled": true,
+                    "fillColor": "#f16c06",
+                    "strokeColor": "#f70000",
+                    "lineWidth": 4,
+                    "isStroked": true,
+                    "width": 60,
+                    "height": 60
+                },
+                {
+                    "type": "Container",
+                    "id": "eeb0ecd8-60f8-4750-921b-c3a16413fb33",
+                    "label": "healthBar",
+                    "y": -50,
+                    "list": [
+                        {
+                            "type": "Rectangle",
+                            "id": "3332f1b9-c866-4539-830a-14c2c70a38e6",
+                            "label": "healthBg",
+                            "isFilled": true,
+                            "fillColor": "#330000",
+                            "strokeColor": "#131313",
+                            "lineWidth": 3,
+                            "isStroked": true,
+                            "width": 62,
+                            "height": 12
+                        },
+                        {
+                            "type": "Rectangle",
+                            "id": "6e539d54-71d0-4b41-9944-c6849ec1ea0f",
+                            "label": "healthFill",
+                            "x": -30,
+                            "originX": 0,
+                            "isFilled": true,
+                            "fillColor": "#16b803",
+                            "width": 60,
+                            "height": 10
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "plainObjects": [],
+    "meta": {
+        "app": "Phaser Editor - Scene Editor",
+        "url": "https://phaser.io/editor",
+        "contentType": "phasereditor2d.core.scene.SceneContentType",
+        "version": 5
+    }
+}

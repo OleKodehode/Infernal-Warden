@@ -59,7 +59,7 @@ export default class Player extends Phaser.GameObjects.Container {
       atk: 10,
       fireRate: 1000,
       projectiles: 1,
-      regen: 0.5,
+      regen: 1.0,
       armor: 0,
     };
     this.muzzleOffset = 58;
