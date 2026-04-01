@@ -137,6 +137,7 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
 
   // Called for spawning
   spawn(x, y, wave = 1) {
+    if (!this.scene || !this.body) return; // Safety check for restarting
     this.setPosition(x, y);
     this.setActive(true);
     this.setVisible(true);

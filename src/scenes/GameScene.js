@@ -455,29 +455,49 @@ export default class GameScene extends Phaser.Scene {
     this.load.pack("Init-Asset-Pack", "assets/Init-Asset-Pack.json");
   }
 
-  bullets = [];
-  bulletPoolSize = 100;
-  lastShot = 0;
-  magmaPool = [];
-  larvaPool = [];
-  enemyBullets = [];
-  enemies = null; // Gets set in create
-  spawnIndicators = []; // pool of indicators
-  lastHitTime = 0;
-  autofire = false;
-  lastToggle = 0;
-  gamepadAiming = false;
-  isPaused = false;
-  lastPauseTime = 0;
+  // bullets = [];
+  // bulletPoolSize = 100;
+  // lastShot = 0;
+  // magmaPool = [];
+  // larvaPool = [];
+  // enemyBullets = [];
+  // enemies = null; // Gets set in create
+  // spawnIndicators = []; // pool of indicators
+  // lastHitTime = 0;
+  // autofire = false;
+  // lastToggle = 0;
+  // gamepadAiming = false;
+  // isPaused = false;
+  // lastPauseTime = 0;
 
   // Write your code here
 
   create() {
     this.editorCreate();
 
+    // Clean slate - Reset all properties
+    this.isPaused = false;
+    this.isWaveActive = true;
+    this.lastPauseTime = 0;
+    this.lastHitTime = 0;
+    this.lastShot = 0;
+    this.lastToggle = 0;
+    this.gamepadAiming = false;
+    this.mouseMoved = false;
+    this.autoFire = false;
+
+    // Reset all pools and groups
+    this.bullets = [];
+    this.bulletPoolSize = 100;
+    this.magmaPool = []; // Magma Slime enemy
+    this.larvaPool = []; // Larva enemy
+    this.enemyBullets = [];
+    this.spawnIndicators = [];
+    this.enemies = null;
+
     // Hooking pause buttons up to methods
     this.setupPauseButton(this.pauseContinueBtn, () => this.resumeGame());
-    this.setupPauseButton(this.pauseRetryBtn, () => this.scene.restart());
+    this.setupPauseButton(this.pauseRetryBtn, () => this.restartGame());
     this.setupPauseButton(this.pauseMenuBtn, () =>
       this.scene.start("MainMenu"),
     );
@@ -743,7 +763,7 @@ export default class GameScene extends Phaser.Scene {
   startWave() {
     this.isWaveActive = true;
     // this.waveTime = Math.min(0 + (this.wave * 5), 60)
-    this.waveTime = Math.min(25 + this.wave * 5, 60);
+    this.waveTime = Math.min(10 + this.wave * 5, 60);
 
     this.waveText.setText(`WAVE ${this.wave}`);
     this.timeLeftText.setText(`${this.waveTime}`);
@@ -1358,6 +1378,54 @@ export default class GameScene extends Phaser.Scene {
     // click
     btnContainer.on("pointerdown", () => {
       if (onClickCallback) onClickCallback();
+    });
+  }
+
+  restartGame() {
+    this.isWaveActive = false;
+    this.isPaused = true;
+
+    // Clean up everything before restarting
+    this.tweens.killAll();
+    this.spawnIndicators.forEach((e) => {
+      if (e) e.setVisible(false);
+    });
+    // clean up player bullets
+    this.bullets.forEach((b) => {
+      b.setActive(false);
+      b.setVisible(false);
+      if (b.body) {
+        b.body.enable = false;
+        b.body.setVelocity(0, 0);
+      }
+    });
+    // clean up enemy bullets
+    this.enemyBullets.forEach((b) => {
+      b.setActive(false);
+      b.setVisible(false);
+      if (b.body) {
+        b.body.enable = false;
+        b.body.setVelocity(0, 0);
+      }
+    });
+
+    // Clean up all enemies
+    this.enemies.getChildren().forEach((enemy) => {
+      if (enemy) {
+        enemy.isAlive = false;
+        if (enemy.healthBar) enemy.healthBar.setVisible(false);
+        enemy.setActive(false);
+        enemy.setVisible(false);
+        if (enemy.body) {
+          enemy.body.enable = false;
+          enemy.body.setVelocity(0, 0);
+        }
+      }
+    });
+
+    // Fully restart
+    this.time.delayedCall(50, () => {
+      this.scene.start("GameScene");
     });
   }
   /* END-USER-CODE */
