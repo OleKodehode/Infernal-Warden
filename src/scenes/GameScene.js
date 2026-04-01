@@ -569,7 +569,12 @@ export default class GameScene extends Phaser.Scene {
       autoFireToggle: "SPACE",
       pause: "ESC",
     });
-    this.input.gamepad.once("connected", (pad) => (this.pad = pad));
+    this.pad = null;
+    if (this.input.gamepad.total > 0) this.pad = this.input.gamepad.getPad(0);
+    this.input.gamepad.once("connected", (pad) => {
+      this.pad = pad;
+      console.log("Gamepad connected.");
+    });
 
     this.input.keyboard.enabled = true;
     if (this.input.gamepad) this.input.gamepad.enabled = true;
@@ -716,11 +721,14 @@ export default class GameScene extends Phaser.Scene {
   update() {
     if (!this.player || !this.player.isAlive || !this.isWaveActive) return;
     const now = this.time.now;
-    console.log(this.pad);
+
+    const padStartPressed =
+      this.pad && this.pad.buttons[9] && this.pad.buttons[9].pressed;
 
     // Pause handling
     if (
-      this.input.keyboard.checkDown(this.keys.pause, 300) &&
+      (this.input.keyboard.checkDown(this.keys.pause, 300) ||
+        padStartPressed) &&
       now - this.lastPauseTime > 300
     ) {
       this.lastPauseTime = now;
