@@ -716,6 +716,7 @@ export default class GameScene extends Phaser.Scene {
   update() {
     if (!this.player || !this.player.isAlive || !this.isWaveActive) return;
     const now = this.time.now;
+    console.log(this.pad);
 
     // Pause handling
     if (
@@ -1259,20 +1260,13 @@ export default class GameScene extends Phaser.Scene {
 
   onPlayerHitEnemy(player, enemy) {
     const now = this.time.now;
-    if (now - this.lastHitTime < 800) return; // 800ms i-frames
-
-    this.lastHitTime = now;
-
-    if (enemy.stats && enemy.stats.dmg) {
-      player.takeDamage(enemy.stats.dmg);
-    }
 
     // Tank trample damage
-    if (enemy.takeDamage) {
+    if (enemy && enemy.isAlive && enemy.takeTrampleDamage) {
       const trample = player.stats.trample || 6; // 6 is default
-      enemy.takeDamage(trample);
+      enemy.takeTrampleDamage(trample);
 
-      // Apply a stn timer
+      // Apply a stun timer
       enemy.stunTime = now + 400;
 
       // gentle knockback
@@ -1285,6 +1279,14 @@ export default class GameScene extends Phaser.Scene {
         (dx / dist) * knockbackForce,
         (dy / dist) * knockbackForce,
       );
+    }
+
+    if (now - this.lastHitTime < 800) return; // 800ms i-frames
+
+    this.lastHitTime = now;
+
+    if (enemy.stats && enemy.stats.dmg) {
+      player.takeDamage(enemy.stats.dmg);
     }
   }
 
@@ -1472,56 +1474,7 @@ export default class GameScene extends Phaser.Scene {
   restartGame() {
     this.isWaveActive = false;
     this.isPaused = true;
-
-    // Clean up everything before restarting
     this.tweens.killAll();
-    this.spawnIndicators.forEach((e) => {
-      if (e) e.setVisible(false);
-    });
-    // clean up player bullets
-    this.bullets.forEach((b) => {
-      b.setActive(false);
-      b.setVisible(false);
-      if (b.body) {
-        b.body.enable = false;
-        b.body.setVelocity(0, 0);
-      }
-    });
-    // clean up enemy bullets
-    this.enemyBullets.forEach((b) => {
-      b.setActive(false);
-      b.setVisible(false);
-      if (b.body) {
-        b.body.enable = false;
-        b.body.setVelocity(0, 0);
-      }
-    });
-
-    // Clean up all enemies
-    this.enemies.getChildren().forEach((enemy) => {
-      if (enemy) {
-        enemy.isAlive = false;
-        if (enemy.healthBar) enemy.healthBar.setVisible(false);
-        enemy.setActive(false);
-        enemy.setVisible(false);
-        if (enemy.body) {
-          enemy.body.enable = false;
-          enemy.body.setVelocity(0, 0);
-        }
-      }
-    });
-
-    // Reset player
-    if (this.player) {
-      this.player.isAlive = true;
-      if (this.player.body) {
-        this.player.body.enable = true;
-        this.player.body.setVelocity(0, 0);
-      }
-      if (this.player.chassis) this.player.chassis.clearTint();
-      if (this.player.turret) this.player.turret.clearTint();
-      if (this.player.healthBar) this.player.healthBar.setVisible(true);
-    }
 
     // Fully restart
     this.time.delayedCall(100, () => {

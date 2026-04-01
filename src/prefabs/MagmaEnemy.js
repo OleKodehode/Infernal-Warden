@@ -55,6 +55,7 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
       speed: 135,
     };
     this.stunTime = 0;
+    this.lastTrampleTime = 0;
 
     this.isAlive = false;
     this.updateHealthBar();
@@ -109,6 +110,14 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
     } else {
       this.updateHealthBar();
     }
+  }
+
+  takeTrampleDamage(amount) {
+    const now = this.scene.time.now;
+    if (now - this.lastTrampleTime < 500) return;
+
+    this.lastTrampleTime = now;
+    this.takeDamage(amount);
   }
 
   die() {

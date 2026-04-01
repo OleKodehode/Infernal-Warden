@@ -57,6 +57,7 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     this.isCharging = false;
     this.chargeStartTime = 0;
     this.originalColor = bodySprite.fillColor; // Temporary until sprite is in place
+    this.lastTrampleTime = 0;
 
     this.updateHealthBar();
 
@@ -151,6 +152,14 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     } else {
       this.updateHealthBar();
     }
+  }
+
+  takeTrampleDamage(amount) {
+    const now = this.scene.time.now;
+    if (now - this.lastTrampleTime < 500) return;
+
+    this.lastTrampleTime = now;
+    this.takeDamage(amount);
   }
 
   die() {
