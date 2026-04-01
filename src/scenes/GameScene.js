@@ -2,8 +2,8 @@
 
 /* START OF COMPILED CODE */
 
-import MagmaEnemy from "../prefabs/MagmaEnemy.js";
 import LarvaEnemy from "../prefabs/LarvaEnemy.js";
+import MagmaEnemy from "../prefabs/MagmaEnemy.js";
 import Player from "../prefabs/Player.js";
 import StatsPanel from "../prefabs/StatsPanel.js";
 /* START-USER-IMPORTS */
@@ -288,6 +288,78 @@ export default class GameScene extends Phaser.Scene {
     });
     upgradeScreen.add(upgradeSub);
 
+    // pauseScreen
+    const pauseScreen = this.add.container(0, 0);
+    pauseScreen.visible = false;
+    hUD.add(pauseScreen);
+
+    // pauseOverlay
+    const pauseOverlay = this.add.rectangle(640, 400, 1280, 800);
+    pauseOverlay.isFilled = true;
+    pauseOverlay.fillColor = 0;
+    pauseOverlay.fillAlpha = 0.85;
+    pauseScreen.add(pauseOverlay);
+
+    // pauseText
+    const pauseText = this.add.text(544, 64, "", {});
+    pauseText.text = "PAUSED";
+    pauseText.setStyle({ fontFamily: "Arial", fontSize: "48px" });
+    pauseScreen.add(pauseText);
+
+    // pauseContinueBtn
+    const pauseContinueBtn = this.add.container(640, 304);
+    pauseScreen.add(pauseContinueBtn);
+
+    // continueBtnBg
+    const continueBtnBg = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg.isFilled = true;
+    continueBtnBg.fillColor = 1973790;
+    continueBtnBg.setRounded(10);
+    pauseContinueBtn.add(continueBtnBg);
+
+    // text_1
+    const text_1 = this.add.text(0, 0, "", {});
+    text_1.setOrigin(0.5, 0.5);
+    text_1.text = "Continue";
+    text_1.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseContinueBtn.add(text_1);
+
+    // pauseRetryBtn
+    const pauseRetryBtn = this.add.container(640, 412);
+    pauseScreen.add(pauseRetryBtn);
+
+    // continueBtnBg_1
+    const continueBtnBg_1 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_1.isFilled = true;
+    continueBtnBg_1.fillColor = 1973790;
+    continueBtnBg_1.setRounded(10);
+    pauseRetryBtn.add(continueBtnBg_1);
+
+    // text
+    const text = this.add.text(0, 0, "", {});
+    text.setOrigin(0.5, 0.5);
+    text.text = "Retry";
+    text.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseRetryBtn.add(text);
+
+    // pauseMenuBtn
+    const pauseMenuBtn = this.add.container(640, 520);
+    pauseScreen.add(pauseMenuBtn);
+
+    // continueBtnBg_2
+    const continueBtnBg_2 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_2.isFilled = true;
+    continueBtnBg_2.fillColor = 1973790;
+    continueBtnBg_2.setRounded(10);
+    pauseMenuBtn.add(continueBtnBg_2);
+
+    // text_2
+    const text_2 = this.add.text(0, 0, "", {});
+    text_2.setOrigin(0.5, 0.5);
+    text_2.text = "Main Menu";
+    text_2.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseMenuBtn.add(text_2);
+
     this.player = player;
     this.statsPanel = statsPanel;
     this.timeLeftText = timeLeftText;
@@ -308,6 +380,13 @@ export default class GameScene extends Phaser.Scene {
     this.upgradeContainers = upgradeContainers;
     this.upgradeTitle = upgradeTitle;
     this.upgradeScreen = upgradeScreen;
+    this.text_1 = text_1;
+    this.pauseContinueBtn = pauseContinueBtn;
+    this.text = text;
+    this.pauseRetryBtn = pauseRetryBtn;
+    this.text_2 = text_2;
+    this.pauseMenuBtn = pauseMenuBtn;
+    this.pauseScreen = pauseScreen;
     this.hUD = hUD;
 
     this.events.emit("scene-awake");
@@ -353,6 +432,20 @@ export default class GameScene extends Phaser.Scene {
   upgradeTitle;
   /** @type {Phaser.GameObjects.Container} */
   upgradeScreen;
+  /** @type {Phaser.GameObjects.Text} */
+  text_1;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseContinueBtn;
+  /** @type {Phaser.GameObjects.Text} */
+  text;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseRetryBtn;
+  /** @type {Phaser.GameObjects.Text} */
+  text_2;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseMenuBtn;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseScreen;
   /** @type {Phaser.GameObjects.Container} */
   hUD;
 
@@ -374,11 +467,33 @@ export default class GameScene extends Phaser.Scene {
   autofire = false;
   lastToggle = 0;
   gamepadAiming = false;
+  isPaused = false;
+  lastPauseTime = 0;
 
   // Write your code here
 
   create() {
     this.editorCreate();
+
+    // Hooking pause buttons up to methods
+    this.setupPauseButton(this.pauseContinueBtn, () => this.resumeGame());
+    this.setupPauseButton(this.pauseRetryBtn, () => this.scene.restart());
+    this.setupPauseButton(this.pauseMenuBtn, () =>
+      this.scene.start("MainMenu"),
+    );
+
+    // Pause screen fix
+    if (this.pauseScreen) {
+      this.pauseScreen.setScrollFactor(0);
+      this.pauseScreen.setDepth(500);
+    }
+
+    // have to make sure the buttosns are within screen space too
+    [this.pauseContinueBtn, this.pauseRetryBtn, this.pauseMenuBtn].forEach(
+      (btn) => {
+        if (btn) btn.setScrollFactor(0);
+      },
+    );
 
     // Arena & Camera setup
     // Arena is at 0,0 with width of 1500 and height of 1100s
@@ -399,6 +514,7 @@ export default class GameScene extends Phaser.Scene {
       d: "D",
       right: "RIGHT",
       autoFireToggle: "SPACE",
+      pause: "ESC",
     });
     this.input.gamepad.once("connected", (pad) => (this.pad = pad));
 
@@ -492,8 +608,23 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     if (!this.player || !this.player.isAlive || !this.isWaveActive) return;
-
     const now = this.time.now;
+
+    // Pause handling
+    if (
+      this.input.keyboard.checkDown(this.keys.pause, 300) &&
+      now - this.lastPauseTime > 300
+    ) {
+      this.lastPauseTime = now;
+      if (this.isPaused) {
+        this.resumeGame();
+      } else {
+        this.pauseGame();
+      }
+      return;
+    }
+
+    if (this.isPaused) return; // Block execution if the game is paused
 
     if (this.upgradeScreen && this.upgradeScreen.visible) {
       this.player.body.setVelocity(0, 0);
@@ -1168,6 +1299,66 @@ export default class GameScene extends Phaser.Scene {
     }
 
     player.takeDamage(bullet.damage || 10);
+  }
+
+  pauseGame() {
+    if (this.isPaused) return;
+    this.isPaused = true;
+    if (this.pauseScreen) this.pauseScreen.visible = true;
+    this.physics.pause();
+    if (this.spawnTimer) this.spawnTimer.paused = true;
+    if (this.waveTimer) this.waveTimer.paused = true;
+
+    // Pause all active tweens (animations)
+    this.tweens.pauseAll();
+  }
+
+  resumeGame() {
+    if (!this.isPaused) return;
+    this.isPaused = false;
+
+    if (this.pauseScreen) this.pauseScreen.visible = false;
+
+    this.physics.resume();
+
+    if (this.spawnTimer) this.spawnTimer.paused = false;
+    if (this.waveTimer) this.waveTimer.paused = false;
+
+    this.tweens.resumeAll();
+  }
+
+  setupPauseButton(btnContainer, onClickCallback) {
+    if (!btnContainer) return;
+
+    if (!btnContainer.list || btnContainer.list.length === 0) return;
+    const txt = btnContainer.list.find((child) => child.type === "Text");
+    const bg = btnContainer.list.find((child) => child.type === "Rectangle");
+
+    if (!bg) return;
+
+    const width = bg.width || 240;
+    const height = bg.height || 60;
+
+    btnContainer.setInteractive({
+      useHandCursor: true,
+      hitArea: new Phaser.Geom.Rectangle(-width / 2, -height / 2, 240, 60),
+      hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+    });
+
+    // Hover effect
+    btnContainer.on("pointerover", () => {
+      btnContainer.setScale(1.08);
+      if (txt) txt.setStyle({ color: "#ffdd00" });
+    });
+    btnContainer.on("pointerout", () => {
+      btnContainer.setScale(1);
+      if (txt) txt.setStyle({ color: "#fff" });
+    });
+
+    // click
+    btnContainer.on("pointerdown", () => {
+      if (onClickCallback) onClickCallback();
+    });
   }
   /* END-USER-CODE */
 }

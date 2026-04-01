@@ -421,6 +421,130 @@
                             "shadow.stroke": true
                         }
                     ]
+                },
+                {
+                    "type": "Container",
+                    "id": "9cd5e14e-36ca-4122-8f31-7c5706e4e615",
+                    "label": "pauseScreen",
+                    "scope": "CLASS",
+                    "visible": false,
+                    "list": [
+                        {
+                            "type": "Rectangle",
+                            "id": "2d529965-419a-41c3-afc5-4e10e96ebf8c",
+                            "label": "pauseOverlay",
+                            "x": 640,
+                            "y": 400,
+                            "isFilled": true,
+                            "fillColor": "#000",
+                            "fillAlpha": 0.85,
+                            "width": 1280,
+                            "height": 800
+                        },
+                        {
+                            "type": "Text",
+                            "id": "587586c2-2a6b-47dd-879b-b76dfb0be1cf",
+                            "label": "pauseText",
+                            "x": 544,
+                            "y": 64,
+                            "text": "PAUSED",
+                            "fontFamily": "Arial",
+                            "fontSize": "48px"
+                        },
+                        {
+                            "type": "Container",
+                            "id": "d4be7efa-4d52-49a8-be4d-d14d87dd47bb",
+                            "label": "pauseContinueBtn",
+                            "scope": "CLASS",
+                            "x": 640,
+                            "y": 304,
+                            "list": [
+                                {
+                                    "type": "Rectangle",
+                                    "id": "ca3ffe81-0106-4522-b6e6-d876f10ba64f",
+                                    "label": "continueBtnBg",
+                                    "isFilled": true,
+                                    "fillColor": "#1e1e1e",
+                                    "width": 240,
+                                    "height": 60,
+                                    "rounded": 10
+                                },
+                                {
+                                    "type": "Text",
+                                    "id": "c84b9e56-e97b-4669-a7c0-ecae170a5984",
+                                    "label": "text_1",
+                                    "scope": "CLASS",
+                                    "originX": 0.5,
+                                    "originY": 0.5,
+                                    "text": "Continue",
+                                    "fontFamily": "Arial",
+                                    "fontSize": "36px"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Container",
+                            "id": "5775a9bb-6651-416e-b84c-ca199d5d3219",
+                            "label": "pauseRetryBtn",
+                            "scope": "CLASS",
+                            "x": 640,
+                            "y": 412,
+                            "list": [
+                                {
+                                    "type": "Rectangle",
+                                    "id": "896fb378-a09d-42b5-ad04-1f629416b4cb",
+                                    "label": "continueBtnBg_1",
+                                    "isFilled": true,
+                                    "fillColor": "#1e1e1e",
+                                    "width": 240,
+                                    "height": 60,
+                                    "rounded": 10
+                                },
+                                {
+                                    "type": "Text",
+                                    "id": "6d369460-fdb2-4c37-9894-ff2f90b4c5ff",
+                                    "label": "text",
+                                    "scope": "CLASS",
+                                    "originX": 0.5,
+                                    "originY": 0.5,
+                                    "text": "Retry",
+                                    "fontFamily": "Arial",
+                                    "fontSize": "36px"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Container",
+                            "id": "a97288fb-f766-40b6-bc50-8bcd45126003",
+                            "label": "pauseMenuBtn",
+                            "scope": "CLASS",
+                            "x": 640,
+                            "y": 520,
+                            "list": [
+                                {
+                                    "type": "Rectangle",
+                                    "id": "01d00bf0-a7bf-4d79-b7a3-9868dc7b3280",
+                                    "label": "continueBtnBg_2",
+                                    "isFilled": true,
+                                    "fillColor": "#1e1e1e",
+                                    "width": 240,
+                                    "height": 60,
+                                    "rounded": 10
+                                },
+                                {
+                                    "type": "Text",
+                                    "id": "4c7eb544-a675-4f12-9ce4-8af37a843238",
+                                    "label": "text_2",
+                                    "scope": "CLASS",
+                                    "originX": 0.5,
+                                    "originY": 0.5,
+                                    "text": "Main Menu",
+                                    "fontFamily": "Arial",
+                                    "fontSize": "36px"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }
