@@ -65,6 +65,8 @@ export default class Player extends Phaser.GameObjects.Container {
     };
     this.muzzleOffset = 58;
     this.isAlive = true;
+    this.body.enable = true;
+    this.body.setVelocity(0, 0);
     this.updateHealthBar();
     // Write your code here.
     /* END-USER-CTR-CODE */

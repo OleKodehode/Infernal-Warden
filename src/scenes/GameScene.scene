@@ -584,7 +584,7 @@
                             "label": "gameOverMenuBtn",
                             "scope": "CLASS",
                             "x": 624,
-                            "y": 416,
+                            "y": 544,
                             "list": [
                                 {
                                     "type": "Rectangle",
@@ -604,6 +604,37 @@
                                     "originX": 0.5,
                                     "originY": 0.5,
                                     "text": "Main Menu",
+                                    "fontFamily": "Arial",
+                                    "fontSize": "36px"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Container",
+                            "id": "2ca8f0d0-dca8-40e2-9984-14222c0fb0ac",
+                            "label": "gameOverRestartBtn",
+                            "scope": "CLASS",
+                            "x": 624,
+                            "y": 352,
+                            "list": [
+                                {
+                                    "type": "Rectangle",
+                                    "id": "ef20caf7-7e39-4284-9548-3671d5492ea8",
+                                    "label": "continueBtnBg_4",
+                                    "isFilled": true,
+                                    "fillColor": "#1e1e1e",
+                                    "width": 240,
+                                    "height": 60,
+                                    "rounded": 10
+                                },
+                                {
+                                    "type": "Text",
+                                    "id": "313cf7c2-75f1-48ba-ab90-eb74a2ddd44b",
+                                    "label": "text_4",
+                                    "scope": "CLASS",
+                                    "originX": 0.5,
+                                    "originY": 0.5,
+                                    "text": "Restart",
                                     "fontFamily": "Arial",
                                     "fontSize": "36px"
                                 }

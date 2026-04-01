@@ -11,392 +11,519 @@ import MagmaEnemy from "../prefabs/MagmaEnemy.js";
 /* END-USER-IMPORTS */
 
 export default class GameScene extends Phaser.Scene {
+  constructor() {
+    super("GameScene");
 
-	constructor() {
-		super("GameScene");
-
-		/* START-USER-CTR-CODE */
+    /* START-USER-CTR-CODE */
     // Write your code here.
     /* END-USER-CTR-CODE */
-	}
+  }
 
-	/** @returns {void} */
-	editorCreate() {
+  /** @returns {void} */
+  editorCreate() {
+    // Lava
+    const lava = this.add.container(-150, -150);
 
-		// Lava
-		const lava = this.add.container(-150, -150);
+    // Outer Border
+    const outer_Border = this.add.rectangle(0, 0, 1800, 1400);
+    outer_Border.setOrigin(0, 0);
+    outer_Border.isFilled = true;
+    outer_Border.fillColor = 14814734;
+    lava.add(outer_Border);
 
-		// Outer Border
-		const outer_Border = this.add.rectangle(0, 0, 1800, 1400);
-		outer_Border.setOrigin(0, 0);
-		outer_Border.isFilled = true;
-		outer_Border.fillColor = 14814734;
-		lava.add(outer_Border);
+    // Arena
+    const arena = this.add.container(0, 0);
 
-		// Arena
-		const arena = this.add.container(0, 0);
+    // Floor
+    const floor = this.add.rectangle(0, 0, 1500, 1100);
+    floor.setOrigin(0, 0);
+    floor.isFilled = true;
+    floor.fillColor = 3615017;
+    arena.add(floor);
 
-		// Floor
-		const floor = this.add.rectangle(0, 0, 1500, 1100);
-		floor.setOrigin(0, 0);
-		floor.isFilled = true;
-		floor.fillColor = 3615017;
-		arena.add(floor);
+    // Entities
+    this.add.container(0, 0);
 
-		// Entities
-		this.add.container(0, 0);
+    // player
+    const player = new Player(this, 0, 0);
+    this.add.existing(player);
 
-		// player
-		const player = new Player(this, 0, 0);
-		this.add.existing(player);
+    // HUD
+    const hUD = this.add.container(0, 0);
 
-		// HUD
-		const hUD = this.add.container(0, 0);
+    // statsPanel
+    const statsPanel = new StatsPanel(this, 128, 160);
+    hUD.add(statsPanel);
 
-		// statsPanel
-		const statsPanel = new StatsPanel(this, 128, 160);
-		hUD.add(statsPanel);
+    // waveInformation
+    const waveInformation = this.add.container(640, 30);
+    hUD.add(waveInformation);
 
-		// waveInformation
-		const waveInformation = this.add.container(640, 30);
-		hUD.add(waveInformation);
+    // timeLeftText
+    const timeLeftText = this.add.text(0, 50, "", {});
+    timeLeftText.setOrigin(0.5, 0);
+    timeLeftText.text = "90";
+    timeLeftText.setStyle({
+      fontFamily: "Arial",
+      fontSize: "28px",
+      stroke: "#000000ff",
+      strokeThickness: 6,
+      "shadow.offsetX": 2,
+      "shadow.offsetY": 2,
+      "shadow.blur": 5,
+      "shadow.stroke": true,
+    });
+    timeLeftText.setPadding({ left: 5, top: 5, right: 5, bottom: 5 });
+    waveInformation.add(timeLeftText);
 
-		// timeLeftText
-		const timeLeftText = this.add.text(0, 50, "", {});
-		timeLeftText.setOrigin(0.5, 0);
-		timeLeftText.text = "90";
-		timeLeftText.setStyle({ "fontFamily": "Arial", "fontSize": "28px", "stroke": "#000000ff", "strokeThickness": 6, "shadow.offsetX": 2, "shadow.offsetY": 2, "shadow.blur": 5, "shadow.stroke": true });
-		timeLeftText.setPadding({"left":5,"top":5,"right":5,"bottom":5});
-		waveInformation.add(timeLeftText);
+    // waveText
+    const waveText = this.add.text(0, 0, "", {});
+    waveText.setOrigin(0.5, 0);
+    waveText.text = "WAVE 1";
+    waveText.setStyle({
+      fontFamily: "Arial",
+      fontSize: "42px",
+      stroke: "#000000ff",
+      strokeThickness: 6,
+      "shadow.offsetX": 2,
+      "shadow.offsetY": 2,
+      "shadow.blur": 5,
+      "shadow.stroke": true,
+    });
+    waveInformation.add(waveText);
 
-		// waveText
-		const waveText = this.add.text(0, 0, "", {});
-		waveText.setOrigin(0.5, 0);
-		waveText.text = "WAVE 1";
-		waveText.setStyle({ "fontFamily": "Arial", "fontSize": "42px", "stroke": "#000000ff", "strokeThickness": 6, "shadow.offsetX": 2, "shadow.offsetY": 2, "shadow.blur": 5, "shadow.stroke": true });
-		waveInformation.add(waveText);
+    // upgradeScreen
+    const upgradeScreen = this.add.container(0, 0);
+    upgradeScreen.visible = false;
+    hUD.add(upgradeScreen);
 
-		// upgradeScreen
-		const upgradeScreen = this.add.container(0, 0);
-		upgradeScreen.visible = false;
-		hUD.add(upgradeScreen);
+    // overlay
+    const overlay = this.add.rectangle(0, 0, 1280, 800);
+    overlay.setOrigin(0, 0);
+    overlay.isFilled = true;
+    overlay.fillColor = 0;
+    overlay.fillAlpha = 0.8;
+    upgradeScreen.add(overlay);
 
-		// overlay
-		const overlay = this.add.rectangle(0, 0, 1280, 800);
-		overlay.setOrigin(0, 0);
-		overlay.isFilled = true;
-		overlay.fillColor = 0;
-		overlay.fillAlpha = 0.8;
-		upgradeScreen.add(overlay);
+    // upgradeContainers
+    const upgradeContainers = this.add.container(105, 395);
+    upgradeScreen.add(upgradeContainers);
 
-		// upgradeContainers
-		const upgradeContainers = this.add.container(105, 395);
-		upgradeScreen.add(upgradeContainers);
+    // upgrade1
+    const upgrade1 = this.add.container(96, 112);
+    upgradeContainers.add(upgrade1);
 
-		// upgrade1
-		const upgrade1 = this.add.container(96, 112);
-		upgradeContainers.add(upgrade1);
+    // upgradeBtn1
+    const upgradeBtn1 = this.add.rectangle(51, 0, 250, 450);
+    upgradeBtn1.isFilled = true;
+    upgradeBtn1.fillAlpha = 0.5;
+    upgradeBtn1.setRounded(10);
+    upgrade1.add(upgradeBtn1);
 
-		// upgradeBtn1
-		const upgradeBtn1 = this.add.rectangle(51, 0, 250, 450);
-		upgradeBtn1.isFilled = true;
-		upgradeBtn1.fillAlpha = 0.5;
-		upgradeBtn1.setRounded(10);
-		upgrade1.add(upgradeBtn1);
+    // upgradeName1
+    const upgradeName1 = this.add.text(48, -160, "", {});
+    upgradeName1.setOrigin(0.5, 0.5);
+    upgradeName1.text = "Fire Power";
+    upgradeName1.setStyle({
+      align: "center",
+      color: "#000000ff",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "38px",
+      maxLines: 2,
+      stroke: "#b60303ff",
+      strokeThickness: 1,
+    });
+    upgradeName1.setWordWrapWidth(230);
+    upgrade1.add(upgradeName1);
 
-		// upgradeName1
-		const upgradeName1 = this.add.text(48, -160, "", {});
-		upgradeName1.setOrigin(0.5, 0.5);
-		upgradeName1.text = "Fire Power";
-		upgradeName1.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "38px", "maxLines": 2, "stroke": "#b60303ff", "strokeThickness": 1 });
-		upgradeName1.setWordWrapWidth(230);
-		upgrade1.add(upgradeName1);
+    // upgradeDesc1
+    const upgradeDesc1 = this.add.text(51, 12, "", {});
+    upgradeDesc1.setOrigin(0.5, 0.5);
+    upgradeDesc1.text = "Increase your attack power by +2";
+    upgradeDesc1.setStyle({
+      align: "center",
+      color: "#000000ff",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "32px",
+      stroke: "#b60303ff",
+      "shadow.offsetX": 1,
+      "shadow.offsetY": 1,
+      "shadow.color": "#b60303ff",
+      "shadow.fill": true,
+    });
+    upgradeDesc1.setPadding({ left: 5, top: 5, right: 5, bottom: 5 });
+    upgradeDesc1.setLineSpacing(10);
+    upgradeDesc1.setWordWrapWidth(240);
+    upgrade1.add(upgradeDesc1);
 
-		// upgradeDesc1
-		const upgradeDesc1 = this.add.text(51, 12, "", {});
-		upgradeDesc1.setOrigin(0.5, 0.5);
-		upgradeDesc1.text = "Increase your attack power by +2";
-		upgradeDesc1.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "32px", "stroke": "#b60303ff", "shadow.offsetX": 1, "shadow.offsetY": 1, "shadow.color": "#b60303ff", "shadow.fill": true });
-		upgradeDesc1.setPadding({"left":5,"top":5,"right":5,"bottom":5});
-		upgradeDesc1.setLineSpacing(10);
-		upgradeDesc1.setWordWrapWidth(240);
-		upgrade1.add(upgradeDesc1);
+    // upgrade2
+    const upgrade2 = this.add.container(480, 112);
+    upgradeContainers.add(upgrade2);
 
-		// upgrade2
-		const upgrade2 = this.add.container(480, 112);
-		upgradeContainers.add(upgrade2);
+    // upgradeBtn2
+    const upgradeBtn2 = this.add.rectangle(51, 0, 250, 450);
+    upgradeBtn2.isFilled = true;
+    upgradeBtn2.fillAlpha = 0.5;
+    upgradeBtn2.setRounded(10);
+    upgrade2.add(upgradeBtn2);
 
-		// upgradeBtn2
-		const upgradeBtn2 = this.add.rectangle(51, 0, 250, 450);
-		upgradeBtn2.isFilled = true;
-		upgradeBtn2.fillAlpha = 0.5;
-		upgradeBtn2.setRounded(10);
-		upgrade2.add(upgradeBtn2);
+    // upgradeName2
+    const upgradeName2 = this.add.text(48, -160, "", {});
+    upgradeName2.setOrigin(0.5, 0.5);
+    upgradeName2.text = "Mobility";
+    upgradeName2.setStyle({
+      align: "center",
+      color: "#000",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "38px",
+      maxLines: 2,
+      stroke: "#b60303ff",
+      strokeThickness: 1,
+      "shadow.offsetX": 2,
+      "shadow.offsetY": 2,
+      "shadow.color": "#b60303ff",
+    });
+    upgradeName2.setWordWrapWidth(230);
+    upgrade2.add(upgradeName2);
 
-		// upgradeName2
-		const upgradeName2 = this.add.text(48, -160, "", {});
-		upgradeName2.setOrigin(0.5, 0.5);
-		upgradeName2.text = "Mobility";
-		upgradeName2.setStyle({ "align": "center", "color": "#000", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "38px", "maxLines": 2, "stroke": "#b60303ff", "strokeThickness": 1, "shadow.offsetX": 2, "shadow.offsetY": 2, "shadow.color": "#b60303ff" });
-		upgradeName2.setWordWrapWidth(230);
-		upgrade2.add(upgradeName2);
+    // upgradeDesc2
+    const upgradeDesc2 = this.add.text(51, 15, "", {});
+    upgradeDesc2.setOrigin(0.5, 0.5);
+    upgradeDesc2.text = "Increase your speed by +10";
+    upgradeDesc2.setStyle({
+      align: "center",
+      color: "#000000ff",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "32px",
+      stroke: "#b60303ff",
+      "shadow.offsetX": 1,
+      "shadow.offsetY": 1,
+      "shadow.color": "#b60303ff",
+      "shadow.fill": true,
+    });
+    upgradeDesc2.setLineSpacing(10);
+    upgradeDesc2.setWordWrapWidth(240);
+    upgrade2.add(upgradeDesc2);
 
-		// upgradeDesc2
-		const upgradeDesc2 = this.add.text(51, 15, "", {});
-		upgradeDesc2.setOrigin(0.5, 0.5);
-		upgradeDesc2.text = "Increase your speed by +10";
-		upgradeDesc2.setStyle({ "align": "center", "color": "#000000ff", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "32px", "stroke": "#b60303ff", "shadow.offsetX": 1, "shadow.offsetY": 1, "shadow.color": "#b60303ff", "shadow.fill": true });
-		upgradeDesc2.setLineSpacing(10);
-		upgradeDesc2.setWordWrapWidth(240);
-		upgrade2.add(upgradeDesc2);
+    // upgrade3
+    const upgrade3 = this.add.container(864, 112);
+    upgradeContainers.add(upgrade3);
 
-		// upgrade3
-		const upgrade3 = this.add.container(864, 112);
-		upgradeContainers.add(upgrade3);
+    // upgradeBtn3
+    const upgradeBtn3 = this.add.rectangle(51, 0, 250, 450);
+    upgradeBtn3.isFilled = true;
+    upgradeBtn3.fillAlpha = 0.5;
+    upgradeBtn3.setRounded(10);
+    upgrade3.add(upgradeBtn3);
 
-		// upgradeBtn3
-		const upgradeBtn3 = this.add.rectangle(51, 0, 250, 450);
-		upgradeBtn3.isFilled = true;
-		upgradeBtn3.fillAlpha = 0.5;
-		upgradeBtn3.setRounded(10);
-		upgrade3.add(upgradeBtn3);
+    // upgradeName3
+    const upgradeName3 = this.add.text(48, -160, "", {});
+    upgradeName3.setOrigin(0.5, 0.5);
+    upgradeName3.text = "Defense";
+    upgradeName3.setStyle({
+      align: "center",
+      color: "#000",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "38px",
+      maxLines: 2,
+      stroke: "#b60303ff",
+      strokeThickness: 1,
+    });
+    upgradeName3.setWordWrapWidth(230);
+    upgrade3.add(upgradeName3);
 
-		// upgradeName3
-		const upgradeName3 = this.add.text(48, -160, "", {});
-		upgradeName3.setOrigin(0.5, 0.5);
-		upgradeName3.text = "Defense";
-		upgradeName3.setStyle({ "align": "center", "color": "#000", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "38px", "maxLines": 2, "stroke": "#b60303ff", "strokeThickness": 1 });
-		upgradeName3.setWordWrapWidth(230);
-		upgrade3.add(upgradeName3);
+    // upgradeDesc3
+    const upgradeDesc3 = this.add.text(51, 15, "", {});
+    upgradeDesc3.setOrigin(0.5, 0.5);
+    upgradeDesc3.text = "Increase your defense by +1";
+    upgradeDesc3.setStyle({
+      align: "center",
+      color: "#000",
+      fixedWidth: 250,
+      fontFamily: "Arial",
+      fontSize: "32px",
+      stroke: "#b60303ff",
+      "shadow.offsetX": 1,
+      "shadow.offsetY": 1,
+      "shadow.color": "#b60303ff",
+      "shadow.fill": true,
+      resolution: 2,
+    });
+    upgradeDesc3.setLineSpacing(10);
+    upgradeDesc3.setWordWrapWidth(240);
+    upgrade3.add(upgradeDesc3);
 
-		// upgradeDesc3
-		const upgradeDesc3 = this.add.text(51, 15, "", {});
-		upgradeDesc3.setOrigin(0.5, 0.5);
-		upgradeDesc3.text = "Increase your defense by +1";
-		upgradeDesc3.setStyle({ "align": "center", "color": "#000", "fixedWidth": 250, "fontFamily": "Arial", "fontSize": "32px", "stroke": "#b60303ff", "shadow.offsetX": 1, "shadow.offsetY": 1, "shadow.color": "#b60303ff", "shadow.fill": true, "resolution": 2 });
-		upgradeDesc3.setLineSpacing(10);
-		upgradeDesc3.setWordWrapWidth(240);
-		upgrade3.add(upgradeDesc3);
+    // upgradeTitle
+    const upgradeTitle = this.add.text(400, 64, "", {});
+    upgradeTitle.text = "WAVE X COMPLETE!";
+    upgradeTitle.setStyle({
+      align: "center",
+      color: "#ffffffff",
+      fontFamily: "Arial",
+      fontSize: "48px",
+      stroke: "#f80101ff",
+      strokeThickness: 4,
+      "shadow.stroke": true,
+      resolution: 2,
+    });
+    upgradeScreen.add(upgradeTitle);
 
-		// upgradeTitle
-		const upgradeTitle = this.add.text(400, 64, "", {});
-		upgradeTitle.text = "WAVE X COMPLETE!";
-		upgradeTitle.setStyle({ "align": "center", "color": "#ffffffff", "fontFamily": "Arial", "fontSize": "48px", "stroke": "#f80101ff", "strokeThickness": 4, "shadow.stroke": true, "resolution": 2 });
-		upgradeScreen.add(upgradeTitle);
+    // upgradeSub
+    const upgradeSub = this.add.text(480, 144, "", {});
+    upgradeSub.text = "Choose an upgrade";
+    upgradeSub.setStyle({
+      align: "center",
+      color: "#ffffffff",
+      fontFamily: "Arial",
+      fontSize: "32px",
+      stroke: "#f80101ff",
+      strokeThickness: 4,
+      "shadow.stroke": true,
+      resolution: 2,
+    });
+    upgradeScreen.add(upgradeSub);
 
-		// upgradeSub
-		const upgradeSub = this.add.text(480, 144, "", {});
-		upgradeSub.text = "Choose an upgrade";
-		upgradeSub.setStyle({ "align": "center", "color": "#ffffffff", "fontFamily": "Arial", "fontSize": "32px", "stroke": "#f80101ff", "strokeThickness": 4, "shadow.stroke": true, "resolution": 2 });
-		upgradeScreen.add(upgradeSub);
+    // pauseScreen
+    const pauseScreen = this.add.container(0, 0);
+    pauseScreen.visible = false;
+    hUD.add(pauseScreen);
 
-		// pauseScreen
-		const pauseScreen = this.add.container(0, 0);
-		pauseScreen.visible = false;
-		hUD.add(pauseScreen);
+    // pauseOverlay
+    const pauseOverlay = this.add.rectangle(640, 400, 1280, 800);
+    pauseOverlay.isFilled = true;
+    pauseOverlay.fillColor = 0;
+    pauseOverlay.fillAlpha = 0.85;
+    pauseScreen.add(pauseOverlay);
 
-		// pauseOverlay
-		const pauseOverlay = this.add.rectangle(640, 400, 1280, 800);
-		pauseOverlay.isFilled = true;
-		pauseOverlay.fillColor = 0;
-		pauseOverlay.fillAlpha = 0.85;
-		pauseScreen.add(pauseOverlay);
+    // pauseText
+    const pauseText = this.add.text(544, 64, "", {});
+    pauseText.text = "PAUSED";
+    pauseText.setStyle({ fontFamily: "Arial", fontSize: "48px" });
+    pauseScreen.add(pauseText);
 
-		// pauseText
-		const pauseText = this.add.text(544, 64, "", {});
-		pauseText.text = "PAUSED";
-		pauseText.setStyle({ "fontFamily": "Arial", "fontSize": "48px" });
-		pauseScreen.add(pauseText);
+    // pauseContinueBtn
+    const pauseContinueBtn = this.add.container(640, 304);
+    pauseScreen.add(pauseContinueBtn);
 
-		// pauseContinueBtn
-		const pauseContinueBtn = this.add.container(640, 304);
-		pauseScreen.add(pauseContinueBtn);
+    // continueBtnBg
+    const continueBtnBg = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg.isFilled = true;
+    continueBtnBg.fillColor = 1973790;
+    continueBtnBg.setRounded(10);
+    pauseContinueBtn.add(continueBtnBg);
 
-		// continueBtnBg
-		const continueBtnBg = this.add.rectangle(0, 0, 240, 60);
-		continueBtnBg.isFilled = true;
-		continueBtnBg.fillColor = 1973790;
-		continueBtnBg.setRounded(10);
-		pauseContinueBtn.add(continueBtnBg);
+    // text_1
+    const text_1 = this.add.text(0, 0, "", {});
+    text_1.setOrigin(0.5, 0.5);
+    text_1.text = "Continue";
+    text_1.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseContinueBtn.add(text_1);
 
-		// text_1
-		const text_1 = this.add.text(0, 0, "", {});
-		text_1.setOrigin(0.5, 0.5);
-		text_1.text = "Continue";
-		text_1.setStyle({ "fontFamily": "Arial", "fontSize": "36px" });
-		pauseContinueBtn.add(text_1);
+    // pauseRetryBtn
+    const pauseRetryBtn = this.add.container(640, 412);
+    pauseScreen.add(pauseRetryBtn);
 
-		// pauseRetryBtn
-		const pauseRetryBtn = this.add.container(640, 412);
-		pauseScreen.add(pauseRetryBtn);
+    // continueBtnBg_1
+    const continueBtnBg_1 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_1.isFilled = true;
+    continueBtnBg_1.fillColor = 1973790;
+    continueBtnBg_1.setRounded(10);
+    pauseRetryBtn.add(continueBtnBg_1);
 
-		// continueBtnBg_1
-		const continueBtnBg_1 = this.add.rectangle(0, 0, 240, 60);
-		continueBtnBg_1.isFilled = true;
-		continueBtnBg_1.fillColor = 1973790;
-		continueBtnBg_1.setRounded(10);
-		pauseRetryBtn.add(continueBtnBg_1);
+    // text
+    const text = this.add.text(0, 0, "", {});
+    text.setOrigin(0.5, 0.5);
+    text.text = "Retry";
+    text.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseRetryBtn.add(text);
 
-		// text
-		const text = this.add.text(0, 0, "", {});
-		text.setOrigin(0.5, 0.5);
-		text.text = "Retry";
-		text.setStyle({ "fontFamily": "Arial", "fontSize": "36px" });
-		pauseRetryBtn.add(text);
+    // pauseMenuBtn
+    const pauseMenuBtn = this.add.container(640, 520);
+    pauseScreen.add(pauseMenuBtn);
 
-		// pauseMenuBtn
-		const pauseMenuBtn = this.add.container(640, 520);
-		pauseScreen.add(pauseMenuBtn);
+    // continueBtnBg_2
+    const continueBtnBg_2 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_2.isFilled = true;
+    continueBtnBg_2.fillColor = 1973790;
+    continueBtnBg_2.setRounded(10);
+    pauseMenuBtn.add(continueBtnBg_2);
 
-		// continueBtnBg_2
-		const continueBtnBg_2 = this.add.rectangle(0, 0, 240, 60);
-		continueBtnBg_2.isFilled = true;
-		continueBtnBg_2.fillColor = 1973790;
-		continueBtnBg_2.setRounded(10);
-		pauseMenuBtn.add(continueBtnBg_2);
+    // text_2
+    const text_2 = this.add.text(0, 0, "", {});
+    text_2.setOrigin(0.5, 0.5);
+    text_2.text = "Main Menu";
+    text_2.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    pauseMenuBtn.add(text_2);
 
-		// text_2
-		const text_2 = this.add.text(0, 0, "", {});
-		text_2.setOrigin(0.5, 0.5);
-		text_2.text = "Main Menu";
-		text_2.setStyle({ "fontFamily": "Arial", "fontSize": "36px" });
-		pauseMenuBtn.add(text_2);
+    // gameOverScreen
+    const gameOverScreen = this.add.container(0, 0);
+    gameOverScreen.visible = false;
+    hUD.add(gameOverScreen);
 
-		// gameOverScreen
-		const gameOverScreen = this.add.container(0, 0);
-		gameOverScreen.visible = false;
-		hUD.add(gameOverScreen);
+    // rectangle_2
+    const rectangle_2 = this.add.rectangle(640, 400, 1280, 800);
+    rectangle_2.isFilled = true;
+    rectangle_2.fillColor = 0;
+    gameOverScreen.add(rectangle_2);
 
-		// rectangle_2
-		const rectangle_2 = this.add.rectangle(640, 400, 1280, 800);
-		rectangle_2.isFilled = true;
-		rectangle_2.fillColor = 0;
-		gameOverScreen.add(rectangle_2);
+    // gameOverText
+    const gameOverText = this.add.text(624, 96, "", {});
+    gameOverText.setOrigin(0.5, 0.5);
+    gameOverText.text = "GAME OVER";
+    gameOverText.setStyle({
+      color: "#c60000ff",
+      fontFamily: "arial",
+      fontSize: "60px",
+      stroke: "#d8ce0aff",
+    });
+    gameOverScreen.add(gameOverText);
 
-		// gameOverText
-		const gameOverText = this.add.text(624, 96, "", {});
-		gameOverText.setOrigin(0.5, 0.5);
-		gameOverText.text = "GAME OVER";
-		gameOverText.setStyle({ "color": "#c60000ff", "fontFamily": "arial", "fontSize": "60px", "stroke": "#d8ce0aff" });
-		gameOverScreen.add(gameOverText);
+    // gameOverMenuBtn
+    const gameOverMenuBtn = this.add.container(624, 544);
+    gameOverScreen.add(gameOverMenuBtn);
 
-		// gameOverMenuBtn
-		const gameOverMenuBtn = this.add.container(624, 416);
-		gameOverScreen.add(gameOverMenuBtn);
+    // continueBtnBg_3
+    const continueBtnBg_3 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_3.isFilled = true;
+    continueBtnBg_3.fillColor = 1973790;
+    continueBtnBg_3.setRounded(10);
+    gameOverMenuBtn.add(continueBtnBg_3);
 
-		// continueBtnBg_3
-		const continueBtnBg_3 = this.add.rectangle(0, 0, 240, 60);
-		continueBtnBg_3.isFilled = true;
-		continueBtnBg_3.fillColor = 1973790;
-		continueBtnBg_3.setRounded(10);
-		gameOverMenuBtn.add(continueBtnBg_3);
+    // text_3
+    const text_3 = this.add.text(0, 0, "", {});
+    text_3.setOrigin(0.5, 0.5);
+    text_3.text = "Main Menu";
+    text_3.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    gameOverMenuBtn.add(text_3);
 
-		// text_3
-		const text_3 = this.add.text(0, 0, "", {});
-		text_3.setOrigin(0.5, 0.5);
-		text_3.text = "Main Menu";
-		text_3.setStyle({ "fontFamily": "Arial", "fontSize": "36px" });
-		gameOverMenuBtn.add(text_3);
+    // gameOverRestartBtn
+    const gameOverRestartBtn = this.add.container(624, 352);
+    gameOverScreen.add(gameOverRestartBtn);
 
-		this.player = player;
-		this.statsPanel = statsPanel;
-		this.timeLeftText = timeLeftText;
-		this.waveText = waveText;
-		this.waveInformation = waveInformation;
-		this.upgradeBtn1 = upgradeBtn1;
-		this.upgradeName1 = upgradeName1;
-		this.upgradeDesc1 = upgradeDesc1;
-		this.upgrade1 = upgrade1;
-		this.upgradeBtn2 = upgradeBtn2;
-		this.upgradeName2 = upgradeName2;
-		this.upgradeDesc2 = upgradeDesc2;
-		this.upgrade2 = upgrade2;
-		this.upgradeBtn3 = upgradeBtn3;
-		this.upgradeName3 = upgradeName3;
-		this.upgradeDesc3 = upgradeDesc3;
-		this.upgrade3 = upgrade3;
-		this.upgradeContainers = upgradeContainers;
-		this.upgradeTitle = upgradeTitle;
-		this.upgradeScreen = upgradeScreen;
-		this.text_1 = text_1;
-		this.pauseContinueBtn = pauseContinueBtn;
-		this.text = text;
-		this.pauseRetryBtn = pauseRetryBtn;
-		this.text_2 = text_2;
-		this.pauseMenuBtn = pauseMenuBtn;
-		this.pauseScreen = pauseScreen;
-		this.text_3 = text_3;
-		this.gameOverMenuBtn = gameOverMenuBtn;
-		this.gameOverScreen = gameOverScreen;
-		this.hUD = hUD;
+    // continueBtnBg_4
+    const continueBtnBg_4 = this.add.rectangle(0, 0, 240, 60);
+    continueBtnBg_4.isFilled = true;
+    continueBtnBg_4.fillColor = 1973790;
+    continueBtnBg_4.setRounded(10);
+    gameOverRestartBtn.add(continueBtnBg_4);
 
-		this.events.emit("scene-awake");
-	}
+    // text_4
+    const text_4 = this.add.text(0, 0, "", {});
+    text_4.setOrigin(0.5, 0.5);
+    text_4.text = "Restart";
+    text_4.setStyle({ fontFamily: "Arial", fontSize: "36px" });
+    gameOverRestartBtn.add(text_4);
 
-	/** @type {Player} */
-	player;
-	/** @type {StatsPanel} */
-	statsPanel;
-	/** @type {Phaser.GameObjects.Text} */
-	timeLeftText;
-	/** @type {Phaser.GameObjects.Text} */
-	waveText;
-	/** @type {Phaser.GameObjects.Container} */
-	waveInformation;
-	/** @type {Phaser.GameObjects.Rectangle} */
-	upgradeBtn1;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeName1;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeDesc1;
-	/** @type {Phaser.GameObjects.Container} */
-	upgrade1;
-	/** @type {Phaser.GameObjects.Rectangle} */
-	upgradeBtn2;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeName2;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeDesc2;
-	/** @type {Phaser.GameObjects.Container} */
-	upgrade2;
-	/** @type {Phaser.GameObjects.Rectangle} */
-	upgradeBtn3;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeName3;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeDesc3;
-	/** @type {Phaser.GameObjects.Container} */
-	upgrade3;
-	/** @type {Phaser.GameObjects.Container} */
-	upgradeContainers;
-	/** @type {Phaser.GameObjects.Text} */
-	upgradeTitle;
-	/** @type {Phaser.GameObjects.Container} */
-	upgradeScreen;
-	/** @type {Phaser.GameObjects.Text} */
-	text_1;
-	/** @type {Phaser.GameObjects.Container} */
-	pauseContinueBtn;
-	/** @type {Phaser.GameObjects.Text} */
-	text;
-	/** @type {Phaser.GameObjects.Container} */
-	pauseRetryBtn;
-	/** @type {Phaser.GameObjects.Text} */
-	text_2;
-	/** @type {Phaser.GameObjects.Container} */
-	pauseMenuBtn;
-	/** @type {Phaser.GameObjects.Container} */
-	pauseScreen;
-	/** @type {Phaser.GameObjects.Text} */
-	text_3;
-	/** @type {Phaser.GameObjects.Container} */
-	gameOverMenuBtn;
-	/** @type {Phaser.GameObjects.Container} */
-	gameOverScreen;
-	/** @type {Phaser.GameObjects.Container} */
-	hUD;
+    this.player = player;
+    this.statsPanel = statsPanel;
+    this.timeLeftText = timeLeftText;
+    this.waveText = waveText;
+    this.waveInformation = waveInformation;
+    this.upgradeBtn1 = upgradeBtn1;
+    this.upgradeName1 = upgradeName1;
+    this.upgradeDesc1 = upgradeDesc1;
+    this.upgrade1 = upgrade1;
+    this.upgradeBtn2 = upgradeBtn2;
+    this.upgradeName2 = upgradeName2;
+    this.upgradeDesc2 = upgradeDesc2;
+    this.upgrade2 = upgrade2;
+    this.upgradeBtn3 = upgradeBtn3;
+    this.upgradeName3 = upgradeName3;
+    this.upgradeDesc3 = upgradeDesc3;
+    this.upgrade3 = upgrade3;
+    this.upgradeContainers = upgradeContainers;
+    this.upgradeTitle = upgradeTitle;
+    this.upgradeScreen = upgradeScreen;
+    this.text_1 = text_1;
+    this.pauseContinueBtn = pauseContinueBtn;
+    this.text = text;
+    this.pauseRetryBtn = pauseRetryBtn;
+    this.text_2 = text_2;
+    this.pauseMenuBtn = pauseMenuBtn;
+    this.pauseScreen = pauseScreen;
+    this.text_3 = text_3;
+    this.gameOverMenuBtn = gameOverMenuBtn;
+    this.text_4 = text_4;
+    this.gameOverRestartBtn = gameOverRestartBtn;
+    this.gameOverScreen = gameOverScreen;
+    this.hUD = hUD;
 
-	/* START-USER-CODE */
+    this.events.emit("scene-awake");
+  }
+
+  /** @type {Player} */
+  player;
+  /** @type {StatsPanel} */
+  statsPanel;
+  /** @type {Phaser.GameObjects.Text} */
+  timeLeftText;
+  /** @type {Phaser.GameObjects.Text} */
+  waveText;
+  /** @type {Phaser.GameObjects.Container} */
+  waveInformation;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  upgradeBtn1;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeName1;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeDesc1;
+  /** @type {Phaser.GameObjects.Container} */
+  upgrade1;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  upgradeBtn2;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeName2;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeDesc2;
+  /** @type {Phaser.GameObjects.Container} */
+  upgrade2;
+  /** @type {Phaser.GameObjects.Rectangle} */
+  upgradeBtn3;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeName3;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeDesc3;
+  /** @type {Phaser.GameObjects.Container} */
+  upgrade3;
+  /** @type {Phaser.GameObjects.Container} */
+  upgradeContainers;
+  /** @type {Phaser.GameObjects.Text} */
+  upgradeTitle;
+  /** @type {Phaser.GameObjects.Container} */
+  upgradeScreen;
+  /** @type {Phaser.GameObjects.Text} */
+  text_1;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseContinueBtn;
+  /** @type {Phaser.GameObjects.Text} */
+  text;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseRetryBtn;
+  /** @type {Phaser.GameObjects.Text} */
+  text_2;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseMenuBtn;
+  /** @type {Phaser.GameObjects.Container} */
+  pauseScreen;
+  /** @type {Phaser.GameObjects.Text} */
+  text_3;
+  /** @type {Phaser.GameObjects.Container} */
+  gameOverMenuBtn;
+  /** @type {Phaser.GameObjects.Text} */
+  text_4;
+  /** @type {Phaser.GameObjects.Container} */
+  gameOverRestartBtn;
+  /** @type {Phaser.GameObjects.Container} */
+  gameOverScreen;
+  /** @type {Phaser.GameObjects.Container} */
+  hUD;
+
+  /* START-USER-CODE */
   /** @returns {void} */
   preload() {
     this.load.pack("Init-Asset-Pack", "assets/Init-Asset-Pack.json");
@@ -408,6 +535,7 @@ export default class GameScene extends Phaser.Scene {
     this.editorCreate();
 
     // Clean slate - Reset all properties
+    this.physics.world.resume();
     this.isPaused = false;
     this.isWaveActive = true;
     this.lastPauseTime = 0;
@@ -443,6 +571,9 @@ export default class GameScene extends Phaser.Scene {
     });
     this.input.gamepad.once("connected", (pad) => (this.pad = pad));
 
+    this.input.keyboard.enabled = true;
+    if (this.input.gamepad) this.input.gamepad.enabled = true;
+
     // Hooking pause buttons up to methods
     this.setupPauseButton(this.pauseContinueBtn, () => this.resumeGame());
     this.setupPauseButton(this.pauseRetryBtn, () => this.restartGame());
@@ -469,8 +600,10 @@ export default class GameScene extends Phaser.Scene {
       this.gameOverScreen.setDepth(800);
     }
     if (this.gameOverMenuBtn) this.gameOverMenuBtn.setScrollFactor(0);
+    if (this.gameOverRestartBtn) this.gameOverRestartBtn.setScrollFactor(0);
 
     // Setup of game over screen button - Reuses the setupPauseButton method
+    this.setupPauseButton(this.gameOverRestartBtn, () => this.restartGame());
     this.setupPauseButton(this.gameOverMenuBtn, () =>
       this.scene.start("MainMenu"),
     );
@@ -481,6 +614,17 @@ export default class GameScene extends Phaser.Scene {
     this.cameras.main.setBounds(-150, -150, 1800, 1400);
     this.player.setPosition(750, 550);
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
+
+    // Force fresh player state on every scene creation/restart
+    if (this.player) {
+      this.player.isAlive = true;
+      this.player.body.enable = true;
+      this.player.body.setVelocity(0, 0);
+      this.player.body.setAngularVelocity(0);
+      if (this.player.chassis) this.player.chassis.clearTint();
+      if (this.player.turret) this.player.turret.clearTint();
+      if (this.player.healthBar) this.player.healthBar.setVisible(true);
+    }
 
     // Physics
     this.player.body.setDamping(true);
@@ -676,7 +820,6 @@ export default class GameScene extends Phaser.Scene {
    * @returns {Phaser.Math.Vector2}
    */
   getInputDirection() {
-    console.log("getInputDirection called - W key:", this.keys.w.isDown);
     let x = 0;
     let y = 0;
 
