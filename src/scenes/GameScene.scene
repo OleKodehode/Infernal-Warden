@@ -545,6 +545,71 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "type": "Container",
+                    "id": "27708b10-fcc7-4ca4-adaf-31a58971a306",
+                    "label": "gameOverScreen",
+                    "scope": "CLASS",
+                    "visible": false,
+                    "list": [
+                        {
+                            "type": "Rectangle",
+                            "id": "b3516ea2-a928-45e7-8a96-d6a0b66f2aa6",
+                            "label": "rectangle_2",
+                            "x": 640,
+                            "y": 400,
+                            "isFilled": true,
+                            "fillColor": "#000000",
+                            "width": 1280,
+                            "height": 800
+                        },
+                        {
+                            "type": "Text",
+                            "id": "73f9ca64-02b9-4ba4-8e9a-09d09422d2ba",
+                            "label": "gameOverText",
+                            "x": 624,
+                            "y": 96,
+                            "originX": 0.5,
+                            "originY": 0.5,
+                            "text": "GAME OVER",
+                            "fontFamily": "arial",
+                            "fontSize": "60px",
+                            "color": "#c60000ff",
+                            "stroke": "#d8ce0aff"
+                        },
+                        {
+                            "type": "Container",
+                            "id": "a5adb17a-30fd-4170-86e6-c3d0f66b7c4f",
+                            "label": "gameOverMenuBtn",
+                            "scope": "CLASS",
+                            "x": 624,
+                            "y": 416,
+                            "list": [
+                                {
+                                    "type": "Rectangle",
+                                    "id": "586ce2f2-2890-4c7e-b26e-13bdb8c3d3a9",
+                                    "label": "continueBtnBg_3",
+                                    "isFilled": true,
+                                    "fillColor": "#1e1e1e",
+                                    "width": 240,
+                                    "height": 60,
+                                    "rounded": 10
+                                },
+                                {
+                                    "type": "Text",
+                                    "id": "b146b5ed-31ba-48cd-a005-0067cf760496",
+                                    "label": "text_3",
+                                    "scope": "CLASS",
+                                    "originX": 0.5,
+                                    "originY": 0.5,
+                                    "text": "Main Menu",
+                                    "fontFamily": "Arial",
+                                    "fontSize": "36px"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         }

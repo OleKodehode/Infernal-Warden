@@ -156,10 +156,15 @@ export default class Player extends Phaser.GameObjects.Container {
 
     // Camera shake + fade
     this.scene.cameras.main.shake(600, 0.008);
-    this.scene.cameras.main.fadeOut(1200);
+    this.scene.cameras.main.fadeOut(800);
 
-    // Re-enable this when mainmenu is active
-    // this.scene.time.delayedCall(1500, () => this.scene.scene.start("MainMenu"));
+    this.scene.time.delayedCall(900, () => {
+      this.scene.showGameOver();
+    });
+
+    this.scene.time.delayedCall(1000, () =>
+      this.scene.cameras.main.fadeIn(200),
+    );
   }
 
   /* END-USER-CODE */
