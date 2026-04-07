@@ -1,5 +1,9 @@
 # Infernal Warden - Survive the Magma Arena
 
+![Infernal Warden Gameplay](assets/screenshots/preview2.gif)
+
+[Play the game here!](https://olekodehode.github.io/Infernal-Warden/)
+
 A top down arena survival shooter with upgrades.
 
 Infernal Warden is a small and simple arena shooter made during a small Game Jam while I attended the [KodeHode](https://www.kodehode.no) Web Developer course.
@@ -35,6 +39,12 @@ The tank steers based on the direction you input (W for North, D for East etc.) 
 - A to shoot.
 - B to toggle auto-fire.
 - Start to pause the game.
+
+### Media
+
+|                    Main Menu                     |                       Gameplay                       |                       Gameplay2                       |
+| :----------------------------------------------: | :--------------------------------------------------: | :---------------------------------------------------: |
+| ![Main Menu](assets/screenshots/screenshot4.jpg) | ![Gameplay Wave](assets/screenshots/screenshot1.jpg) | ![GamePlay2 Wave](assets/screenshots/screenshot2.jpg) |
 
 ### TechStack
 
