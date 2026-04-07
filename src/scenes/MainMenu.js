@@ -27,7 +27,7 @@ export default class MainMenu extends Phaser.Scene {
 	editorCreate() {
 
 		// main_menu
-		this.add.image(640, 400, "main-menu");
+		this.add.image(640, 400, "main-menu_1");
 
 		// title_text_quick_edit
 		this.add.image(368, 144, "title-text-quick-edit");

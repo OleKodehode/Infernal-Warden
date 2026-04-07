@@ -18,22 +18,18 @@
             "label": "container_1",
             "list": [
                 {
-                    "type": "Ellipse",
+                    "type": "Image",
                     "id": "6dd9e67e-29f2-4a18-9089-380cd7afd9e2",
                     "label": "ellipse_1",
                     "hitArea.shape": "CIRCLE",
                     "hitArea.x": 28,
                     "hitArea.y": 28,
                     "hitArea.radius": 28,
+                    "texture": {
+                        "key": "enemySlime"
+                    },
                     "x": 30,
-                    "y": 30,
-                    "isFilled": true,
-                    "fillColor": "#f16c06",
-                    "strokeColor": "#f70000",
-                    "lineWidth": 4,
-                    "isStroked": true,
-                    "width": 60,
-                    "height": 60
+                    "y": 30
                 },
                 {
                     "type": "Container",

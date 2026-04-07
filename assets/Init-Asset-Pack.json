@@ -12,9 +12,34 @@
                 "key": "dust-texture"
             },
             {
+                "url": "assets/EnemyLarva.png",
+                "type": "image",
+                "key": "EnemyLarva"
+            },
+            {
+                "url": "assets/enemySlime.png",
+                "type": "image",
+                "key": "enemySlime"
+            },
+            {
+                "url": "assets/floor.png",
+                "type": "image",
+                "key": "floor"
+            },
+            {
+                "url": "assets/lava.png",
+                "type": "image",
+                "key": "lava"
+            },
+            {
                 "url": "assets/main-menu.jpg",
                 "type": "image",
                 "key": "main-menu"
+            },
+            {
+                "url": "assets/main-menu.png",
+                "type": "image",
+                "key": "main-menu_1"
             },
             {
                 "url": "assets/pentagram.png",

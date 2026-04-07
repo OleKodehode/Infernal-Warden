@@ -53,7 +53,7 @@ export default class Player extends Phaser.GameObjects.Container {
     this.healthBar = healthBar;
     this.stats = {
       speed: 180,
-      turnSpeed: 0.01,
+      turnSpeed: 0.012,
       maxHealth: 100.0,
       currentHealth: 100.0,
       atk: 12,

@@ -17,17 +17,20 @@
             "type": "Container",
             "id": "dc3e7f2b-6f6a-4e31-ad18-2db3e4055f85",
             "label": "Lava",
+            "scope": "CLASS",
             "x": -150,
             "y": -150,
             "list": [
                 {
-                    "type": "Rectangle",
+                    "type": "TileSprite",
                     "id": "a23f3997-be12-4237-8783-4505f9696886",
-                    "label": "Outer Border",
+                    "label": "lavaBorder",
+                    "scope": "CLASS",
+                    "texture": {
+                        "key": "lava"
+                    },
                     "originX": 0,
                     "originY": 0,
-                    "isFilled": true,
-                    "fillColor": "#e20e0e",
                     "width": 1800,
                     "height": 1400
                 }
@@ -39,15 +42,28 @@
             "label": "Arena",
             "list": [
                 {
-                    "type": "Rectangle",
+                    "type": "TileSprite",
                     "id": "8e74498a-69df-455c-8829-6dd8e8b3cad4",
                     "label": "Floor",
+                    "texture": {
+                        "key": "floor"
+                    },
                     "originX": 0,
                     "originY": 0,
-                    "isFilled": true,
-                    "fillColor": "#372929",
                     "width": 1500,
-                    "height": 1100
+                    "height": 1100,
+                    "list": [
+                        {
+                            "type": "Shadow",
+                            "id": "e7499365-31db-40f0-b059-f68ee43e6078",
+                            "label": "shadowFilter",
+                            "x": 20.75,
+                            "y": 10,
+                            "power": 10,
+                            "intensity": 2,
+                            "internal": true
+                        }
+                    ]
                 }
             ]
         },

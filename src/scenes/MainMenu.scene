@@ -21,7 +21,7 @@
             "id": "e22d3060-c8f8-4237-8ec8-a001ffe88cea",
             "label": "main_menu",
             "texture": {
-                "key": "main-menu"
+                "key": "main-menu_1"
             },
             "x": 640,
             "y": 400

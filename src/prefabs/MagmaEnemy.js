@@ -10,16 +10,11 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
     super(scene, x ?? 0, y ?? 0);
 
     // ellipse_1
-    const ellipse_1 = scene.add.ellipse(30, 30, 60, 60);
+    const ellipse_1 = scene.add.image(30, 30, "enemySlime");
     ellipse_1.setInteractive(
       new Phaser.Geom.Circle(28, 28, 28),
       Phaser.Geom.Circle.Contains,
     );
-    ellipse_1.isFilled = true;
-    ellipse_1.fillColor = 15821830;
-    ellipse_1.isStroked = true;
-    ellipse_1.strokeColor = 16187392;
-    ellipse_1.lineWidth = 4;
     this.add(ellipse_1);
 
     // healthBar
@@ -104,12 +99,18 @@ export default class MagmaEnemy extends Phaser.GameObjects.Container {
 
     this.lastHitTime = now;
 
+    if (this.bodySprite) this.bodySprite.setTintFill(0xffffff);
+
     this.stats.currentHealth -= amount;
     if (this.stats.currentHealth <= 0) {
       this.die();
     } else {
       this.updateHealthBar();
     }
+
+    this.scene.time.delayedCall(80, () => {
+      this.bodySprite.clearTint();
+    });
   }
 
   takeTrampleDamage(amount) {

@@ -24,22 +24,22 @@ export default class GameScene extends Phaser.Scene {
     // Lava
     const lava = this.add.container(-150, -150);
 
-    // Outer Border
-    const outer_Border = this.add.rectangle(0, 0, 1800, 1400);
-    outer_Border.setOrigin(0, 0);
-    outer_Border.isFilled = true;
-    outer_Border.fillColor = 14814734;
-    lava.add(outer_Border);
+    // lavaBorder
+    const lavaBorder = this.add.tileSprite(0, 0, 1800, 1400, "lava");
+    lavaBorder.setOrigin(0, 0);
+    lava.add(lavaBorder);
 
     // Arena
     const arena = this.add.container(0, 0);
 
     // Floor
-    const floor = this.add.rectangle(0, 0, 1500, 1100);
+    const floor = this.add.tileSprite(0, 0, 1500, 1100, "floor");
+    floor.enableFilters();
     floor.setOrigin(0, 0);
-    floor.isFilled = true;
-    floor.fillColor = 3615017;
     arena.add(floor);
+
+    // shadowFilter
+    floor.filters.internal.addShadow(20.75, 10, 0.1, 10, 0, 6, 2);
 
     // Entities
     this.add.container(0, 0);
@@ -419,6 +419,8 @@ export default class GameScene extends Phaser.Scene {
     text_4.setStyle({ fontFamily: "Arial", fontSize: "36px" });
     gameOverRestartBtn.add(text_4);
 
+    this.lavaBorder = lavaBorder;
+    this.lava = lava;
     this.player = player;
     this.statsPanel = statsPanel;
     this.timeLeftText = timeLeftText;
@@ -456,6 +458,10 @@ export default class GameScene extends Phaser.Scene {
     this.events.emit("scene-awake");
   }
 
+  /** @type {Phaser.GameObjects.TileSprite} */
+  lavaBorder;
+  /** @type {Phaser.GameObjects.Container} */
+  lava;
   /** @type {Player} */
   player;
   /** @type {StatsPanel} */
@@ -548,7 +554,7 @@ export default class GameScene extends Phaser.Scene {
 
     // Reset all pools and groups
     this.bullets = [];
-    this.bulletPoolSize = 100;
+    this.bulletPoolSize = 80;
     this.magmaPool = []; // Magma Slime enemy
     this.larvaPool = []; // Larva enemy
     this.enemyBullets = [];
@@ -822,6 +828,11 @@ export default class GameScene extends Phaser.Scene {
         enemy.update(this.player);
       }
     });
+
+    if (this.lavaBorder) {
+      this.lavaBorder.tilePositionX += 0.25;
+      this.lavaBorder.tilePositionY += 0.1;
+    }
   }
 
   /**
@@ -1311,8 +1322,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   createMagmaPool() {
-    for (let i = 0; i < 60; i++) {
-      // 60 magma pool - Increase if necessary
+    for (let i = 0; i < 50; i++) {
+      // 50 magma pool - Increase if necessary
       const enemy = new MagmaEnemy(this, -2000, -2000); // Spawn off-screen
       enemy.setActive(false);
       enemy.setVisible(false);

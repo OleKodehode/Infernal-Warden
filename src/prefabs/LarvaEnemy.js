@@ -10,12 +10,7 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     super(scene, x ?? 0, y ?? 0);
 
     // bodySprite
-    const bodySprite = scene.add.ellipse(0, 0, 80, 40);
-    bodySprite.isFilled = true;
-    bodySprite.fillColor = 4656911;
-    bodySprite.isStroked = true;
-    bodySprite.strokeColor = 2829099;
-    bodySprite.lineWidth = 3;
+    const bodySprite = scene.add.image(0, 0, "EnemyLarva");
     this.add(bodySprite);
 
     // healthBar
@@ -56,7 +51,7 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     this.isAlive = false;
     this.isCharging = false;
     this.chargeStartTime = 0;
-    this.originalColor = bodySprite.fillColor; // Temporary until sprite is in place
+    // this.originalColor = bodySprite.fillColor; // Temporary until sprite is in place
     this.lastTrampleTime = 0;
 
     this.updateHealthBar();
@@ -107,8 +102,8 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
 
         // Visual telegraph
         if (this.bodySprite) {
-          // this.bodySprite.setTint(0xff5500);
-          this.bodySprite.fillColor = 0xff5500;
+          this.bodySprite.setTint(0xff5500);
+          // this.bodySprite.fillColor = 0xff5500;
         }
       }
 
@@ -123,8 +118,8 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
           this.chargeStartTime = now;
           this.isCharging = true;
         } else {
-          // if (this.bodySprite) this.bodySprite.clearTint();
-          if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
+          if (this.bodySprite) this.bodySprite.clearTint();
+          // if (this.bodySprite) this.bodySprite.fillColor = this.originalColor;
         }
       }
     }
@@ -152,6 +147,12 @@ export default class LarvaEnemy extends Phaser.GameObjects.Container {
     } else {
       this.updateHealthBar();
     }
+
+    if (this.bodySprite) this.bodySprite.setTintFill(0xffffff);
+
+    this.scene.time.delayedCall(80, () => {
+      this.bodySprite.clearTint();
+    });
   }
 
   takeTrampleDamage(amount) {
